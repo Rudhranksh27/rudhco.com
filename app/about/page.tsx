@@ -19,7 +19,7 @@ export default function AboutPage() {
                         The Legacy
                     </h2>
                     <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-gray-500">
-                        About Rudhranksh
+                        About Rudhco
                     </h1>
                     <div className="w-24 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent mx-auto opacity-50"></div>
                 </div>

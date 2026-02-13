@@ -17,7 +17,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="group">
             <div className="text-2xl font-bold text-white tracking-widest uppercase">
-              Rudhranksh
+              Rudhco
               <span className="text-amber-500 group-hover:text-blue-500 transition-colors duration-500">.</span>
             </div>
           </Link>

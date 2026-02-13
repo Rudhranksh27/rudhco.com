@@ -1,6 +1,6 @@
 import Navbar from '../app/navbar';
 import Image from 'next/image';
-import CarOutline from '../images/car_outline.jpg';
+// import CarOutline from '../images/car03.png';
 import HomeOutline from '../images/home01.png';
 import Link from 'next/dist/client/link';
 
@@ -14,7 +14,7 @@ export default function Home() {
            {/* =========================================
             SECTION 1: CONSTRUCTION (Homes)
             ========================================= */}
-        <section className="w-full min-h-[85vh] flex justify-center items-center p-6 md:p-20 m-20 relative overflow-hidden">
+        <section className="w-full min-h-[70vh] flex justify-center items-center p-6 md:p-20 m-20 relative overflow-hidden">
            {/* Background Gradient Effect */}
            <div className="absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl from-amber-900/10 to-transparent pointer-events-none" />
 
@@ -28,7 +28,7 @@ export default function Home() {
                       Architectural Vision
                     </h2>
                     <h1 className="text-5xl md:text-7xl font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500">
-                      Rudhranksh <br/> Construction
+                      Rudhco Infra<br/>& Tech Pvt. Ltd.
                     </h1>
                   </div>
                   
@@ -59,7 +59,7 @@ export default function Home() {
         </section>
 
         {/* Visual Divider Line */}
-        <div className="w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-gray-800 to-transparent opacity-50"></div>
+        {/* <div className="w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-gray-800 to-transparent opacity-50"></div> */}
 
 
       </main>
