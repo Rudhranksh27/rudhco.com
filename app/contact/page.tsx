@@ -23,25 +23,20 @@ export default function ContactPage() {
         }));
     };
 
-    // 3. Handle Form Submission (Constructs the Mailto link)
+    // 3. Handle Form Submission
     const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
         const { firstName, lastName, phoneno, email, subject, message } = formData;
-        
-        // Construct the email body
+        // Construct the email body        
         const emailBody = `
-Name: ${firstName} ${lastName}
-Phone: ${phoneno}
-Email: ${email}
-
-Message:
-${message}
+            Name: ${firstName} ${lastName}
+            Phone: ${phoneno}
+            Email: ${email}
+            Message: ${message}
         `;
 
-        // Create the mailto link
-        const mailtoLink = `mailto:rudhranksh@rudhco.com?subject=${encodeURIComponent(subject || 'New Contact Inquiry')}&body=${encodeURIComponent(emailBody)}`;
-
+        const mailtoLink = `mailto:business@rudhco.com?subject=${encodeURIComponent(subject || 'New Contact Inquiry')}&body=${encodeURIComponent(emailBody)}`;
         // Trigger the email client
         window.location.href = mailtoLink;
     };
@@ -56,44 +51,28 @@ ${message}
             </div>
 
             <main className="flex-grow flex items-center justify-center relative z-10 w-full px-6 py-24 md:py-32">
-                <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24">
+                {/* GRID LAYOUT CHANGE:
+                    Mobile: Single column, natural DOM order (Title -> Form -> Contact Info).
+                    Desktop: 2 Columns. Form spans 2 rows on the right. Title and Contact Info stack on the left.
+                */}
+                <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-x-24 md:gap-y-12 items-start">
                     
-                    {/* LEFT COLUMN */}
-                    <div className="flex flex-col justify-center space-y-12">
-                        <div>
-                            <h2 className="text-amber-500 tracking-[0.3em] text-xs font-bold uppercase mb-4">
-                                Concierge Service
-                            </h2>
-                            <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500 leading-tight">
-                                Get in <br /> Touch.
-                            </h1>
-                            <div className="w-16 h-1 bg-amber-500 mt-8 mb-8 opacity-80"></div>
-                            <p className="text-gray-400 text-lg font-light leading-relaxed max-w-md">
-                                Whether you are looking to build your legacy or find the perfect drive, our team is dedicated to providing exquisite service tailored to your needs.
-                            </p>
-                        </div>
-
-                        <div className="space-y-6">
-                            <ContactItem 
-                                icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>}
-                                title="Email Us"
-                                detail="rudhranksh@rudhco.com"
-                            />
-                            <ContactItem 
-                                icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>}
-                                title="Call Us"
-                                detail="+91 84718 88393"
-                            />
-                             <ContactItem 
-                                icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
-                                title="Headquarters"
-                                detail="House No-35, 3rd floor, Panjabari Road, Near Canara Bank, Panjabari Brunch, Pin - 781022, Assam"
-                            />
-                        </div>
+                    {/* BLOCK 1: Title Section (Top on Mobile, Top-Left on Desktop) */}
+                    <div className="flex flex-col justify-center">
+                        <h2 className="text-amber-500 tracking-[0.3em] text-xs font-bold uppercase mb-4">
+                            Concierge Service
+                        </h2>
+                        <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500 leading-tight">
+                            Get in <br /> Touch.
+                        </h1>
+                        <div className="w-16 h-1 bg-amber-500 mt-8 mb-8 opacity-80"></div>
+                        <p className="text-gray-400 text-lg font-light leading-relaxed max-w-md">
+                            Whether you are looking to build your legacy or find the perfect drive, our team is dedicated to provide exquisite service tailored to your needs.
+                        </p>
                     </div>
 
-                    {/* RIGHT COLUMN: The Form */}
-                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 md:p-12 rounded-2xl shadow-2xl">
+                    {/* BLOCK 2: The Form (Middle on Mobile, Right Side on Desktop) */}
+                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 md:p-12 rounded-2xl shadow-2xl md:row-span-2">
                         <form className="space-y-8" onSubmit={handleSend}>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -168,6 +147,24 @@ ${message}
                         </form>
                     </div>
 
+                    {/* BLOCK 3: Contact Info (Bottom on Mobile, Bottom-Left on Desktop) */}
+                    <div className="space-y-6">
+                        <ContactItem 
+                            icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>}
+                            title="Email Us"
+                            detail="business@rudhco.com"
+                        />
+                        <ContactItem 
+                            icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>}
+                            title="Call Us"
+                            detail="+91 84718 88393"
+                        />
+                         <ContactItem 
+                            icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
+                            title="Headquarter"
+                            detail="House No-35, 3rd floor, Panjabari Road, Near Canara Bank, Panjabari Branch, Pin - 781022, Assam"
+                        />
+                    </div>
                 </div>
             </main>
         </div>
@@ -189,7 +186,7 @@ function ContactItem({ icon, title, detail }: { icon: React.ReactNode; title: st
     );
 }
 
-// Helper: Form Input Group (Now accepts value, onChange, name)
+// Helper: Form Input Group
 function InputGroup({ label, placeholder, type = "text", name, value, onChange }: { label: string; placeholder: string; type?: string; name: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) {
     return (
         <div className="group relative">

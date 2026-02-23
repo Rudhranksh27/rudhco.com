@@ -36,7 +36,7 @@ export default function AboutPage() {
                             Welcome to an ecosystem of luxury and precision. We are dedicated to providing the best service possible, bridging the gap between dream and reality.
                         </p>
                         <p className="text-gray-400 text-lg leading-relaxed font-light">
-                            Our team is passionate about delivering high-quality solutions that meet your distinct needs. While building your legacy, Rudhranksh stands as your partner in perfection.
+                            Our team is passionate about delivering high-quality solutions that meet your distinct needs. While building your legacy, Rudhco stands as your partner in perfection.
                         </p>
                     </div>
 
@@ -74,7 +74,7 @@ export default function AboutPage() {
                 {/* 3. FOOTER SIGNATURE */}
                 <div className="mt-24 text-center">
                     <p className="text-gray-600 uppercase tracking-[0.4em] text-xs">
-                        Est. 2026
+                        Estd. 2026
                     </p>
                 </div>
 
