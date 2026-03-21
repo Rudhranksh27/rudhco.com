@@ -67,7 +67,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="w-full py-8 border-t border-white/10 bg-black/40 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 text-center text-gray-600 text-sm tracking-wide">
-          &copy; 2026 RUDHRANKSH INFRA & TECH PVT. LTD. ALL RIGHTS RESERVED.
+          &copy; 2026 RUDHCO INFRA & TECH PVT. LTD. ALL RIGHTS RESERVED.
         </div>
       </footer>
     </div>

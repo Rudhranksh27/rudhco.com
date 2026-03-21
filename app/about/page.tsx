@@ -1,6 +1,6 @@
 import Navbar from '../navbar';
 
-export default function AboutPage() {
+export default function About() {
     return (
         <div className="flex flex-col min-h-screen font-sans bg-neutral-950 text-white selection:bg-amber-500 selection:text-black">
             <Navbar />

@@ -28,7 +28,7 @@ export default function Navbar() {
               {/* 3. Compare pathname with href to determine isActive */}
               <NavItem href="/" text="Home" isActive={pathname === '/'} />
               <NavItem href="/about" text="About" isActive={pathname === '/about'} />
-              {/* <NavItem href="/search_cars" text="Search Cars" isActive={pathname === '/search_cars'} /> */}
+              <NavItem href="/services" text="Services" isActive={pathname === '/services'} />
               <NavItem href="/contact" text="Contact" isActive={pathname === '/contact'} />
             </ul>
           </div>
@@ -59,7 +59,7 @@ export default function Navbar() {
           <ul className="flex flex-col items-center py-8 space-y-6">
             <MobileNavItem href="/" text="Home" onClick={() => setIsOpen(false)} isActive={pathname === '/'} />
             <MobileNavItem href="/about" text="About" onClick={() => setIsOpen(false)} isActive={pathname === '/about'} />
-            {/* <MobileNavItem href="/search_cars" text="Search Cars" onClick={() => setIsOpen(false)} isActive={pathname === '/search_cars'} /> */}
+            <MobileNavItem href="/services" text="Services" onClick={() => setIsOpen(false)} isActive={pathname === '/services'} />
             <MobileNavItem href="/contact" text="Contact" onClick={() => setIsOpen(false)} isActive={pathname === '/contact'} />
           </ul>
         </div>
