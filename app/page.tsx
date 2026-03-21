@@ -2,7 +2,7 @@ import Navbar from '../app/navbar';
 import Image from 'next/image';
 // import CarOutline from '../images/car03.png';
 import HomeOutline from '../images/home01.png';
-import Link from 'next/dist/client/link';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -36,14 +36,17 @@ export default function Home() {
                     Your ultimate destination to construct the perfect Home. Explore premium materials and bespoke designs to build your legacy.
                   </p>
                   
-                  <Link href="/contact">
-                    <button className="group relative px-10 py-4 bg-transparent overflow-hidden rounded-full border border-white/20 hover:border-amber-500 transition-all duration-300 w-full md:w-auto">
-                      <span className="relative z-10 text-white group-hover:text-amber-500 font-bold tracking-widest text-sm uppercase transition-colors">
-                        Contact Constructor
-                      </span>
-                      <div className="absolute inset-0 h-full w-full scale-0 rounded-full transition-all duration-300 group-hover:scale-100 group-hover:bg-white/5"></div>
-                    </button>
-                  </Link>
+                  <div className="flex justify-center md:justify-start">
+                      <Link 
+                        href="/contact"
+                        className="group relative inline-flex justify-center items-center px-10 py-4 bg-transparent overflow-hidden rounded-full border border-white/20 hover:border-amber-500 transition-all duration-300 w-full md:w-auto"
+                      >
+                        <span className="relative z-10 text-white group-hover:text-amber-500 font-bold tracking-widest text-sm uppercase transition-colors">
+                          Contact Constructor
+                        </span>
+                        <div className="absolute inset-0 h-full w-full scale-0 rounded-full transition-all duration-300 group-hover:scale-100 group-hover:bg-white/5"></div>
+                      </Link>
+                  </div>
               </div>
 
               {/* Image Block */}
