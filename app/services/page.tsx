@@ -1,7 +1,59 @@
 "use client";
 
+import { useEffect, useRef, useState, ReactNode } from "react";
 import Navbar from "../navbar";
-import Link from "next/link"; // Assuming you use Next.js routing
+import Link from "next/link"; 
+
+// --- ANIMATION WRAPPER COMPONENT ---
+interface AnimateOnScrollProps {
+    children: ReactNode;
+    direction?: "up" | "down" | "left" | "right" | "none";
+    delay?: number;
+    className?: string;
+}
+
+function AnimateOnScroll({ children, direction = "up", delay = 0, className = "" }: AnimateOnScrollProps) {
+    const [isVisible, setIsVisible] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                } else {
+                    setIsVisible(false); 
+                }
+            },
+            { 
+                threshold: 0.15, 
+                rootMargin: "0px 0px -50px 0px" 
+            } 
+        );
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+        return () => observer.disconnect();
+    }, []);
+
+    let hiddenClasses = "opacity-0 ";
+    if (direction === "up") hiddenClasses += "translate-y-16";
+    if (direction === "down") hiddenClasses += "-translate-y-16";
+    if (direction === "left") hiddenClasses += "-translate-x-16";
+    if (direction === "right") hiddenClasses += "translate-x-16";
+    if (direction === "none") hiddenClasses += "scale-95";
+
+    return (
+        <div
+            ref={ref}
+            className={`transition-all duration-[1000ms] ease-out ${isVisible ? "opacity-100 translate-y-0 translate-x-0 scale-100" : hiddenClasses} ${className}`}
+            style={{ transitionDelay: `${delay}ms` }}
+        >
+            {children}
+        </div>
+    );
+}
 
 export default function ServicesPage() {
     const services = [
@@ -40,7 +92,7 @@ export default function ServicesPage() {
         },
         {
             id: "interior",
-            title: "Interior Design & Turnkey",
+            title: "Interior Design & Ready to Use",
             subtitle: "Curated Sanctuaries",
             description: "A sovereign experience from conceptualization to final execution. We preside over every detail—delivering fully realized, exquisitely designed spaces ready for your immediate command.",
             icon: (
@@ -55,17 +107,33 @@ export default function ServicesPage() {
         <div className="flex flex-col min-h-screen font-sans bg-neutral-950 text-white selection:bg-amber-500 selection:text-black">
             <Navbar />
 
+            {/* --- CUSTOM CSS FOR BACKGROUND ANIMATION --- */}
+            <style>{`
+                @keyframes float-blob {
+                    0% { transform: translate(0px, 0px) scale(1); }
+                    33% { transform: translate(30px, -50px) scale(1.1); }
+                    66% { transform: translate(-20px, 20px) scale(0.9); }
+                    100% { transform: translate(0px, 0px) scale(1); }
+                }
+                .animate-float-slow {
+                    animation: float-blob 20s ease-in-out infinite;
+                }
+                .animate-float-slower {
+                    animation: float-blob 25s ease-in-out infinite reverse;
+                }
+            `}</style>
+
             {/* Ambient Background Effects */}
             <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-                <div className="absolute top-1/4 left-[-10%] w-[500px] h-[500px] bg-amber-900/10 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-blue-900/5 rounded-full blur-[150px]" />
+                <div className="absolute top-1/4 left-[-10%] w-[500px] h-[500px] bg-amber-900/10 rounded-full blur-[120px] animate-float-slow" />
+                <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-blue-900/5 rounded-full blur-[150px] animate-float-slower" />
             </div>
 
             <main className="flex-grow flex flex-col relative z-10 w-full px-6 py-24 md:py-32">
                 <div className="max-w-7xl mx-auto w-full">
                     
                     {/* Page Header */}
-                    <div className="text-center max-w-3xl mx-auto mb-20 md:mb-28">
+                    <AnimateOnScroll direction="down" className="text-center max-w-3xl mx-auto mb-20 md:mb-28">
                         <h2 className="text-amber-500 tracking-[0.3em] text-xs font-bold uppercase mb-4">
                             The Dominion of Build
                         </h2>
@@ -75,17 +143,24 @@ export default function ServicesPage() {
                         <p className="text-gray-400 text-lg font-light leading-relaxed">
                             From the earth, we command structure. Explore our suite of sovereign services, dedicated to the pursuit of permanence, precision, and architectural excellence.
                         </p>
-                    </div>
+                    </AnimateOnScroll>
 
-                    {/* Services Grid */}
+                    {/* Services Grid with Staggered Animations */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-                        {services.map((service) => (
-                            <ServiceCard key={service.id} {...service} />
+                        {services.map((service, index) => (
+                            <AnimateOnScroll 
+                                key={service.id} 
+                                direction="up" 
+                                delay={index * 150} // Multiplies delay by index for a waterfall effect
+                                className="h-full"
+                            >
+                                <ServiceCard {...service} />
+                            </AnimateOnScroll>
                         ))}
                     </div>
 
                     {/* Call to Action Section */}
-                    <div className="mt-32 text-center bg-white/5 backdrop-blur-sm border border-white/10 p-12 md:p-16 rounded-3xl relative overflow-hidden group">
+                    <AnimateOnScroll direction="up" className="mt-32 text-center bg-white/5 backdrop-blur-sm border border-white/10 p-12 md:p-16 rounded-3xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                         <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 relative z-10">Ready to build your kingdom?</h2>
                         <p className="text-gray-400 max-w-xl mx-auto mb-10 relative z-10">
@@ -93,10 +168,10 @@ export default function ServicesPage() {
                         </p>
                         <Link href="/contact" className="inline-flex items-center justify-center relative z-10 px-8 py-4 bg-transparent overflow-hidden rounded-full border border-amber-500 hover:bg-amber-500 transition-all duration-300 group/btn">
                             <span className="text-amber-500 group-hover/btn:text-black font-bold tracking-widest text-sm uppercase transition-colors">
-                                Commission a Project
+                                Enquiry Now
                             </span>
                         </Link>
-                    </div>
+                    </AnimateOnScroll>
 
                 </div>
             </main>
@@ -107,7 +182,7 @@ export default function ServicesPage() {
 // Sub-component for the individual service cards
 function ServiceCard({ title, subtitle, description, icon }: { title: string, subtitle: string, description: string, icon: React.ReactNode }) {
     return (
-        <div className="group relative bg-white/5 backdrop-blur-sm border border-white/10 p-8 md:p-10 rounded-2xl transition-all duration-500 hover:border-amber-500/50 hover:bg-white/[0.07] hover:-translate-y-1">
+        <div className="h-full group relative bg-white/5 backdrop-blur-sm border border-white/10 p-8 md:p-10 rounded-2xl transition-all duration-500 hover:border-amber-500/50 hover:bg-white/[0.07] hover:-translate-y-1">
             
             {/* Top Accent Line */}
             <div className="absolute top-0 left-0 w-0 h-[2px] bg-amber-500 transition-all duration-500 group-hover:w-full rounded-t-2xl"></div>

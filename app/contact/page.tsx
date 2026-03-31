@@ -1,7 +1,58 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect, useRef, ReactNode } from 'react';
 import Navbar from "../navbar";
+
+// --- ANIMATION WRAPPER COMPONENT ---
+interface AnimateOnScrollProps {
+    children: ReactNode;
+    direction?: "up" | "down" | "left" | "right" | "none";
+    delay?: number;
+    className?: string;
+}
+
+function AnimateOnScroll({ children, direction = "up", delay = 0, className = "" }: AnimateOnScrollProps) {
+    const [isVisible, setIsVisible] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                } else {
+                    setIsVisible(false); 
+                }
+            },
+            { 
+                threshold: 0.15, 
+                rootMargin: "0px 0px -50px 0px" 
+            } 
+        );
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+        return () => observer.disconnect();
+    }, []);
+
+    let hiddenClasses = "opacity-0 ";
+    if (direction === "up") hiddenClasses += "translate-y-16";
+    if (direction === "down") hiddenClasses += "-translate-y-16";
+    if (direction === "left") hiddenClasses += "-translate-x-16";
+    if (direction === "right") hiddenClasses += "translate-x-16";
+    if (direction === "none") hiddenClasses += "scale-95";
+
+    return (
+        <div
+            ref={ref}
+            className={`transition-all duration-[1000ms] ease-out ${isVisible ? "opacity-100 translate-y-0 translate-x-0 scale-100" : hiddenClasses} ${className}`}
+            style={{ transitionDelay: `${delay}ms` }}
+        >
+            {children}
+        </div>
+    );
+}
 
 export default function ContactPage() {
     // 1. State to store form data
@@ -42,37 +93,49 @@ export default function ContactPage() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen font-sans bg-neutral-950 text-white selection:bg-amber-500 selection:text-black">
+        <div className="flex flex-col min-h-screen font-sans bg-neutral-950 text-white selection:bg-amber-500 selection:text-black overflow-hidden">
             <Navbar />
 
+            {/* --- CUSTOM CSS FOR BACKGROUND ANIMATION --- */}
+            <style>{`
+                @keyframes float-blob {
+                    0% { transform: translate(0px, 0px) scale(1); }
+                    33% { transform: translate(30px, -50px) scale(1.1); }
+                    66% { transform: translate(-20px, 20px) scale(0.9); }
+                    100% { transform: translate(0px, 0px) scale(1); }
+                }
+                .animate-float-slow {
+                    animation: float-blob 20s ease-in-out infinite;
+                }
+                .animate-float-slower {
+                    animation: float-blob 25s ease-in-out infinite reverse;
+                }
+            `}</style>
+
             <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-amber-900/5 rounded-full blur-[120px]" />
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-900/5 rounded-full blur-[120px]" />
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-amber-900/5 rounded-full blur-[120px] animate-float-slow" />
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-900/5 rounded-full blur-[120px] animate-float-slower" />
             </div>
 
             <main className="flex-grow flex items-center justify-center relative z-10 w-full px-6 py-24 md:py-32">
-                {/* GRID LAYOUT CHANGE:
-                    Mobile: Single column, natural DOM order (Title -> Form -> Contact Info).
-                    Desktop: 2 Columns. Form spans 2 rows on the right. Title and Contact Info stack on the left.
-                */}
                 <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-x-24 md:gap-y-12 items-start">
                     
-                    {/* BLOCK 1: Title Section (Top on Mobile, Top-Left on Desktop) */}
-                    <div className="flex flex-col justify-center">
+                    {/* BLOCK 1: Title Section */}
+                    <AnimateOnScroll direction="left" delay={0} className="flex flex-col justify-center">
                         <h2 className="text-amber-500 tracking-[0.3em] text-xs font-bold uppercase mb-4">
                             Concierge Service
                         </h2>
                         <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500 leading-tight">
                             Get in <br /> Touch.
                         </h1>
-                        <div className="w-16 h-1 bg-amber-500 mt-8 mb-8 opacity-80"></div>
+                        <div className="w-16 h-1 bg-amber-500 mt-8 mb-8 opacity-80 transition-transform duration-1000 hover:scale-x-150 origin-left"></div>
                         <p className="text-gray-400 text-lg font-light leading-relaxed max-w-md">
                             Whether you are looking to build your legacy or find the perfect drive, our team is dedicated to provide exquisite service tailored to your needs.
                         </p>
-                    </div>
+                    </AnimateOnScroll>
 
-                    {/* BLOCK 2: The Form (Middle on Mobile, Right Side on Desktop) */}
-                    <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 md:p-12 rounded-2xl shadow-2xl md:row-span-2">
+                    {/* BLOCK 2: The Form */}
+                    <AnimateOnScroll direction="up" delay={150} className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 md:p-12 rounded-2xl shadow-2xl md:row-span-2">
                         <form className="space-y-8" onSubmit={handleSend}>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -145,10 +208,10 @@ export default function ContactPage() {
                             </div>
 
                         </form>
-                    </div>
+                    </AnimateOnScroll>
 
-                    {/* BLOCK 3: Contact Info (Bottom on Mobile, Bottom-Left on Desktop) */}
-                    <div className="space-y-6">
+                    {/* BLOCK 3: Contact Info */}
+                    <AnimateOnScroll direction="up" delay={300} className="space-y-6">
                         <ContactItem 
                             icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>}
                             title="Email Us"
@@ -164,7 +227,7 @@ export default function ContactPage() {
                             title="Headquarter"
                             detail="House No-35, 3rd floor, Panjabari Road, Near Canara Bank, Panjabari Branch, Pin - 781022, Assam"
                         />
-                    </div>
+                    </AnimateOnScroll>
                 </div>
             </main>
         </div>
