@@ -139,8 +139,8 @@ function DesktopServicesDropdown({ pathname }: { pathname: string }) {
           <div className="relative group/sub">
             <div className="px-5 py-3 hover:bg-white/5 cursor-pointer flex items-center justify-between transition-colors">
               <span className="text-sm font-medium text-gray-300 group-hover/sub:text-amber-500 tracking-wide">Construction Services</span>
-              {/* Responsive Arrow Icon: Points Left on md, Points Right on lg */}
-              <svg className="w-4 h-4 text-gray-500 group-hover/sub:text-amber-500 transform transition-transform duration-300 md:group-hover/sub:rotate-90 lg:group-hover/sub:-rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {/* Arrow Icon: Points Left when hovering */}
+              <svg className="w-4 h-4 text-gray-500 group-hover/sub:text-amber-500 transform transition-transform duration-300 group-hover/sub:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </div>
