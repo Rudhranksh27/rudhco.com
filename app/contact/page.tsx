@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, ReactNode } from 'react';
+import { useEffect, useRef, useState, ReactNode } from "react";
 import Navbar from "../navbar";
 
 // --- ANIMATION WRAPPER COMPONENT ---
@@ -93,28 +93,36 @@ export default function ContactPage() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen font-sans bg-neutral-950 text-white selection:bg-amber-500 selection:text-black overflow-hidden">
+        <div className="flex flex-col min-h-screen font-sans bg-slate-50 text-slate-900 selection:bg-amber-500 selection:text-white overflow-hidden">
             <Navbar />
 
             {/* --- CUSTOM CSS FOR BACKGROUND ANIMATION --- */}
             <style>{`
-                @keyframes float-blob {
-                    0% { transform: translate(0px, 0px) scale(1); }
-                    33% { transform: translate(30px, -50px) scale(1.1); }
-                    66% { transform: translate(-20px, 20px) scale(0.9); }
-                    100% { transform: translate(0px, 0px) scale(1); }
+                @keyframes geo-spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
                 }
-                .animate-float-slow {
-                    animation: float-blob 20s ease-in-out infinite;
+                @keyframes geo-float {
+                    0% { transform: translateY(0px) rotate(0deg); }
+                    50% { transform: translateY(-40px) rotate(10deg); }
+                    100% { transform: translateY(0px) rotate(0deg); }
                 }
-                .animate-float-slower {
-                    animation: float-blob 25s ease-in-out infinite reverse;
+                .animate-geo-spin {
+                    animation: geo-spin 40s linear infinite;
+                }
+                .animate-geo-spin-slow {
+                    animation: geo-spin 60s linear infinite reverse;
+                }
+                .animate-geo-float {
+                    animation: geo-float 15s ease-in-out infinite;
                 }
             `}</style>
 
+            {/* Ambient Background Effects (Geometric Light Theme) */}
             <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-amber-900/5 rounded-full blur-[120px] animate-float-slow" />
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-900/5 rounded-full blur-[120px] animate-float-slower" />
+                <div className="absolute top-[15%] left-[5%] w-[400px] h-[400px] border-[40px] border-amber-500/10 rounded-3xl animate-geo-spin" />
+                <div className="absolute bottom-[10%] right-[5%] w-[300px] h-[300px] border-[30px] border-blue-600/5 rounded-full animate-geo-float" />
+                <div className="absolute top-[40%] right-[20%] w-[150px] h-[150px] bg-amber-400/10 rotate-45 animate-geo-spin-slow" />
             </div>
 
             <main className="flex-grow flex items-center justify-center relative z-10 w-full px-6 py-24 md:py-32">
@@ -125,17 +133,17 @@ export default function ContactPage() {
                         <h2 className="text-amber-500 tracking-[0.3em] text-xs font-bold uppercase mb-4">
                             Concierge Service
                         </h2>
-                        <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500 leading-tight">
+                        <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 leading-tight">
                             Get in <br /> Touch.
                         </h1>
                         <div className="w-16 h-1 bg-amber-500 mt-8 mb-8 opacity-80 transition-transform duration-1000 hover:scale-x-150 origin-left"></div>
-                        <p className="text-gray-400 text-lg font-light leading-relaxed max-w-md">
+                        <p className="text-slate-600 text-lg font-light leading-relaxed max-w-md">
                             Whether you are looking to build your legacy or find the perfect drive, our team is dedicated to provide exquisite service tailored to your needs.
                         </p>
                     </AnimateOnScroll>
 
                     {/* BLOCK 2: The Form */}
-                    <AnimateOnScroll direction="up" delay={150} className="bg-white/5 backdrop-blur-sm border border-white/10 p-8 md:p-12 rounded-2xl shadow-2xl md:row-span-2">
+                    <AnimateOnScroll direction="up" delay={150} className="bg-white shadow-2xl shadow-slate-200/50 border border-slate-100 p-8 md:p-12 rounded-3xl md:row-span-2">
                         <form className="space-y-8" onSubmit={handleSend}>
                             
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -182,13 +190,13 @@ export default function ContactPage() {
                             />
 
                             <div className="group relative">
-                                <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2 group-focus-within:text-amber-500 transition-colors">
+                                <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 group-focus-within:text-amber-600 transition-colors">
                                     Message
                                 </label>
                                 <textarea 
                                     name="message"
                                     rows={4}
-                                    className="w-full bg-transparent border-b border-gray-700 text-white placeholder-gray-600 focus:border-amber-500 focus:outline-none transition-colors resize-none py-2"
+                                    className="w-full bg-transparent border-b border-slate-300 text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none transition-colors resize-none py-2"
                                     placeholder="Tell us about your requirements..."
                                     value={formData.message}
                                     onChange={handleChange}
@@ -198,12 +206,12 @@ export default function ContactPage() {
                             <div className="pt-4">
                                 <button 
                                     type="submit" 
-                                    className="group relative w-full py-4 bg-transparent overflow-hidden rounded-full border border-white/20 hover:border-amber-500 transition-all duration-300"
+                                    className="group relative w-full py-4 bg-amber-500 overflow-hidden rounded-full shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:shadow-[0_0_30px_rgba(245,158,11,0.4)] transition-all duration-300"
                                 >
-                                    <span className="relative z-10 text-white group-hover:text-amber-500 font-bold tracking-widest text-sm uppercase transition-colors">
+                                    <span className="relative z-10 text-white font-bold tracking-widest text-sm uppercase transition-colors">
                                         Send Message
                                     </span>
-                                    <div className="absolute inset-0 h-full w-full scale-0 rounded-full transition-all duration-300 group-hover:scale-100 group-hover:bg-white/5"></div>
+                                    <div className="absolute inset-0 h-full w-full scale-0 rounded-full transition-all duration-300 group-hover:scale-100 group-hover:bg-amber-400"></div>
                                 </button>
                             </div>
 
@@ -237,13 +245,13 @@ export default function ContactPage() {
 // Helper: Contact Info Row
 function ContactItem({ icon, title, detail }: { icon: React.ReactNode; title: string; detail: string }) {
     return (
-        <div className="flex items-center gap-4 group cursor-pointer">
-            <div className="p-3 bg-white/5 rounded-full text-gray-400 group-hover:text-amber-500 group-hover:bg-amber-500/10 transition-all duration-300">
+        <div className="flex items-center gap-5 group cursor-pointer p-4 rounded-2xl hover:bg-white hover:shadow-lg transition-all duration-300 border border-transparent hover:border-slate-100">
+            <div className="p-3 bg-slate-100 rounded-full text-amber-500 group-hover:bg-amber-50 group-hover:text-amber-600 transition-all duration-300">
                 {icon}
             </div>
             <div>
-                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest">{title}</h3>
-                <p className="text-white text-lg font-light group-hover:translate-x-1 transition-transform duration-300">{detail}</p>
+                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">{title}</h3>
+                <p className="text-slate-700 text-lg font-medium group-hover:translate-x-1 group-hover:text-amber-600 transition-all duration-300">{detail}</p>
             </div>
         </div>
     );
@@ -253,7 +261,7 @@ function ContactItem({ icon, title, detail }: { icon: React.ReactNode; title: st
 function InputGroup({ label, placeholder, type = "text", name, value, onChange }: { label: string; placeholder: string; type?: string; name: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) {
     return (
         <div className="group relative">
-            <label className="block text-xs font-bold uppercase tracking-widest text-gray-500 mb-2 group-focus-within:text-amber-500 transition-colors">
+            <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 group-focus-within:text-amber-600 transition-colors">
                 {label}
             </label>
             <input 
@@ -261,7 +269,7 @@ function InputGroup({ label, placeholder, type = "text", name, value, onChange }
                 name={name}
                 value={value}
                 onChange={onChange}
-                className="w-full bg-transparent border-b border-gray-700 text-white placeholder-gray-600 py-2 focus:border-amber-500 focus:outline-none transition-colors"
+                className="w-full bg-transparent border-b border-slate-300 text-slate-900 placeholder-slate-400 py-2 focus:border-amber-500 focus:outline-none transition-colors"
                 placeholder={placeholder}
             />
         </div>

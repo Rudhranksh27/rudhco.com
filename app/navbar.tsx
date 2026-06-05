@@ -10,16 +10,16 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-black/50 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+    <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all duration-300">
       
       <div className="max-w-7xl mx-auto px-6 md:px-10">
         <div className="flex items-center justify-between h-20">
           
           {/* Logo */}
           <Link href="/" className="group">
-            <div className="text-2xl font-bold text-white tracking-widest uppercase">
+            <div className="text-2xl font-bold text-slate-900 tracking-widest uppercase">
               Rudhco
-              <span className="text-amber-500 group-hover:text-blue-500 transition-colors duration-500">.</span>
+              <span className="text-amber-500 group-hover:text-blue-600 transition-colors duration-500">.</span>
             </div>
           </Link>
 
@@ -40,7 +40,7 @@ export default function Navbar() {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-white hover:text-amber-500 focus:outline-none transition-colors"
+              className="text-slate-900 hover:text-amber-500 focus:outline-none transition-colors"
             >
               {isOpen ? (
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-neutral-950/95 backdrop-blur-xl border-b border-white/10 shadow-2xl max-h-[80vh] overflow-y-auto">
+        <div className="md:hidden absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-2xl max-h-[80vh] overflow-y-auto">
           <ul className="flex flex-col items-center py-8 space-y-6">
             <MobileNavItem href="/" text="Home" onClick={() => setIsOpen(false)} isActive={pathname === '/'} />
             <MobileNavItem href="/about" text="About" onClick={() => setIsOpen(false)} isActive={pathname === '/about'} />
@@ -70,7 +70,7 @@ export default function Navbar() {
                 <Link 
                   href="/services" 
                   onClick={() => setIsOpen(false)}
-                  className={`text-sm font-medium tracking-widest uppercase transition-colors py-2 ${pathname.startsWith('/services') ? 'text-amber-500' : 'text-gray-300 hover:text-white'}`}
+                  className={`text-sm font-medium tracking-widest uppercase transition-colors py-2 ${pathname.startsWith('/services') ? 'text-amber-600' : 'text-slate-700 hover:text-amber-500'}`}
                 >
                   Services
                 </Link>
@@ -81,7 +81,7 @@ export default function Navbar() {
                     e.preventDefault();
                     setIsMobileServicesOpen(!isMobileServicesOpen);
                   }}
-                  className={`p-2 transition-colors ${pathname.startsWith('/services') ? 'text-amber-500' : 'text-gray-300 hover:text-white'}`}
+                  className={`p-2 transition-colors ${pathname.startsWith('/services') ? 'text-amber-600' : 'text-slate-600 hover:text-amber-500'}`}
                 >
                   <svg className={`w-5 h-5 transition-transform duration-300 ${isMobileServicesOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -91,17 +91,17 @@ export default function Navbar() {
               
               {/* Expanded Mobile Links */}
               <div className={`overflow-hidden transition-all duration-300 w-full px-6 flex flex-col items-center ${isMobileServicesOpen ? 'max-h-[500px] mt-2 opacity-100' : 'max-h-0 opacity-0'}`}>
-                <div className="w-full bg-white/5 rounded-xl py-4 flex flex-col items-center space-y-4">
-                    <div className="text-[10px] text-gray-500 font-bold tracking-[0.3em] uppercase">Construction</div>
-                    <MobileSubNavItem href="/services#residential" text="Residential Construction" onClick={() => setIsOpen(false)} />
-                    <MobileSubNavItem href="/services#commercial" text="Commercial Construction" onClick={() => setIsOpen(false)} />
+                <div className="w-full bg-slate-50 border border-slate-100 rounded-xl py-4 flex flex-col items-center space-y-4">
+                    <div className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase">Construction</div>
+                    <MobileSubNavItem href="/residential" text="Residential Construction" onClick={() => setIsOpen(false)} />
+                    <MobileSubNavItem href="/commercial" text="Commercial Construction" onClick={() => setIsOpen(false)} />
                     <MobileSubNavItem href="/services#renovation" text="Renovation & Remodelling" onClick={() => setIsOpen(false)} />
                     <MobileSubNavItem href="/services#interior" text="Interior Design & Turnkey" onClick={() => setIsOpen(false)} />
                     
-                    <div className="w-12 h-[1px] bg-white/10 my-2"></div>
+                    <div className="w-12 h-[1px] bg-slate-200 my-2"></div>
                     
-                    <div className="text-[10px] text-gray-500 font-bold tracking-[0.3em] uppercase">Digital</div>
-                    <MobileSubNavItem href="https://rudhco.com/digital.marketing/" text="Digital Services" onClick={() => setIsOpen(false)} />
+                    <div className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase">Digital</div>
+                    <MobileSubNavItem href="/digital_marketing/digital_home" text="Digital Services" onClick={() => setIsOpen(false)} />
                 </div>
               </div>
             </li>
@@ -124,7 +124,7 @@ function DesktopServicesDropdown({ pathname }: { pathname: string }) {
       {/* Main Navbar Link (Hit Area Extended via Padding) */}
       <Link href="/services" className="block py-6 -my-6">
         <div className="relative py-2 inline-block cursor-pointer">
-            <span className={`text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300 ${isActive ? 'text-white' : 'text-gray-400 group-hover/main:text-white'}`}>
+            <span className={`text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300 ${isActive ? 'text-amber-600' : 'text-slate-600 group-hover/main:text-amber-500'}`}>
               Services
             </span>
             <span className={`absolute bottom-0 left-0 h-[1px] bg-amber-500 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover/main:w-full'}`}></span>
@@ -133,14 +133,14 @@ function DesktopServicesDropdown({ pathname }: { pathname: string }) {
 
       {/* Level 1 Dropdown (Appears on Hover) - Centered under the text */}
       <div className="absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 invisible group-hover/main:opacity-100 group-hover/main:visible transition-all duration-300 z-50 w-64">
-        <div className="bg-neutral-900/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2 relative">
+        <div className="bg-white/95 backdrop-blur-xl border border-slate-200 rounded-xl shadow-xl py-2 relative">
 
           {/* Construction Services Item (Has Level 2 Dropdown) */}
           <div className="relative group/sub">
-            <div className="px-5 py-3 hover:bg-white/5 cursor-pointer flex items-center justify-between transition-colors">
-              <span className="text-sm font-medium text-gray-300 group-hover/sub:text-amber-500 tracking-wide">Construction Services</span>
+            <div className="px-5 py-3 hover:bg-slate-50 cursor-pointer flex items-center justify-between transition-colors">
+              <span className="text-sm font-medium text-slate-700 group-hover/sub:text-amber-600 tracking-wide">Construction Services</span>
               {/* Arrow Icon: Points Left when hovering */}
-              <svg className="w-4 h-4 text-gray-500 group-hover/sub:text-amber-500 transform transition-transform duration-300 group-hover/sub:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-4 h-4 text-slate-400 group-hover/sub:text-amber-600 transform transition-transform duration-300 group-hover/sub:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </div>
@@ -148,9 +148,9 @@ function DesktopServicesDropdown({ pathname }: { pathname: string }) {
             {/* Level 2 Dropdown (Side Menu) - Responsive Positioning */}
             {/* Opens LEFT on md screens (to avoid overflow), opens RIGHT on lg screens */}
             <div className="absolute top-0 md:right-full md:left-auto md:pr-2 lg:right-full lg:right-auto lg:pl-2 lg:pr-0 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 w-[280px]">
-              <div className="bg-neutral-900/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl py-2">
-                <DropdownLink href="/services#residential" text="Residential Construction" />
-                <DropdownLink href="/services#commercial" text="Commercial Construction" />
+              <div className="bg-white/95 backdrop-blur-xl border border-slate-200 rounded-xl shadow-xl py-2">
+                <DropdownLink href="/residential" text="Residential Construction" />
+                <DropdownLink href="/commercial" text="Commercial Construction" />
                 <DropdownLink href="/services#renovation" text="Renovation & Remodelling" />
                 <DropdownLink href="/services#interior" text="Interior Design & Turnkey" />
               </div>
@@ -158,8 +158,8 @@ function DesktopServicesDropdown({ pathname }: { pathname: string }) {
           </div>
 
           {/* Digital Services Item */}
-          <Link href="https://rudhco.com/digital.marketing/" className="block px-5 py-3 hover:bg-white/5 transition-colors">
-            <span className="text-sm font-medium text-gray-300 hover:text-amber-500 tracking-wide">Digital Services</span>
+          <Link href="/digital_marketing/digital_home" className="block px-5 py-3 hover:bg-slate-50 transition-colors">
+            <span className="text-sm font-medium text-slate-700 hover:text-amber-600 tracking-wide">Digital Services</span>
           </Link>
 
         </div>
@@ -173,7 +173,7 @@ function NavItem({ href, text, isActive = false }: { href: string; text: string;
   return (
     <li className="relative group cursor-pointer py-6 -my-6">
       <Link href={href} className="relative py-2 inline-block">
-        <span className={`text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300 ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-white'}`}>
+        <span className={`text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300 ${isActive ? 'text-amber-600' : 'text-slate-600 group-hover:text-amber-500'}`}>
           {text}
         </span>
         <span className={`absolute bottom-0 left-0 h-[1px] bg-amber-500 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
@@ -185,8 +185,8 @@ function NavItem({ href, text, isActive = false }: { href: string; text: string;
 // Helper: Desktop Dropdown Sub-Link
 function DropdownLink({ href, text }: { href: string; text: string }) {
   return (
-    <Link href={href} className="block px-5 py-3 hover:bg-white/5 transition-colors group/item">
-      <span className="text-sm text-gray-400 group-hover/item:text-white transition-colors block">
+    <Link href={href} className="block px-5 py-3 hover:bg-slate-50 transition-colors group/item">
+      <span className="text-sm text-slate-600 group-hover/item:text-amber-600 transition-colors block">
         {text}
       </span>
     </Link>
@@ -197,7 +197,7 @@ function DropdownLink({ href, text }: { href: string; text: string }) {
 function MobileNavItem({ href, text, onClick, isActive }: { href: string; text: string; onClick: () => void; isActive: boolean }) {
   return (
     <Link href={href} onClick={onClick}>
-      <li className={`text-sm font-medium tracking-widest uppercase cursor-pointer transition-colors ${isActive ? 'text-amber-500' : 'text-gray-300 hover:text-white'}`}>
+      <li className={`text-sm font-medium tracking-widest uppercase cursor-pointer transition-colors ${isActive ? 'text-amber-600' : 'text-slate-700 hover:text-amber-500'}`}>
         {text}
       </li>
     </Link>
@@ -208,7 +208,7 @@ function MobileNavItem({ href, text, onClick, isActive }: { href: string; text: 
 function MobileSubNavItem({ href, text, onClick }: { href: string; text: string; onClick: () => void }) {
   return (
     <Link href={href} onClick={onClick} className="w-full text-center">
-      <span className="text-sm text-gray-400 hover:text-amber-500 transition-colors block py-1">
+      <span className="text-sm text-slate-500 hover:text-amber-600 transition-colors block py-1">
         {text}
       </span>
     </Link>

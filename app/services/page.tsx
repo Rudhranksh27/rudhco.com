@@ -104,29 +104,36 @@ export default function ServicesPage() {
     ];
 
     return (
-        <div className="flex flex-col min-h-screen font-sans bg-neutral-950 text-white selection:bg-amber-500 selection:text-black">
+        <div className="flex flex-col min-h-screen font-sans bg-slate-50 text-slate-900 selection:bg-amber-500 selection:text-white overflow-x-hidden">
             <Navbar />
 
             {/* --- CUSTOM CSS FOR BACKGROUND ANIMATION --- */}
             <style>{`
-                @keyframes float-blob {
-                    0% { transform: translate(0px, 0px) scale(1); }
-                    33% { transform: translate(30px, -50px) scale(1.1); }
-                    66% { transform: translate(-20px, 20px) scale(0.9); }
-                    100% { transform: translate(0px, 0px) scale(1); }
+                @keyframes geo-spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
                 }
-                .animate-float-slow {
-                    animation: float-blob 20s ease-in-out infinite;
+                @keyframes geo-float {
+                    0% { transform: translateY(0px) rotate(0deg); }
+                    50% { transform: translateY(-40px) rotate(10deg); }
+                    100% { transform: translateY(0px) rotate(0deg); }
                 }
-                .animate-float-slower {
-                    animation: float-blob 25s ease-in-out infinite reverse;
+                .animate-geo-spin {
+                    animation: geo-spin 40s linear infinite;
+                }
+                .animate-geo-spin-slow {
+                    animation: geo-spin 60s linear infinite reverse;
+                }
+                .animate-geo-float {
+                    animation: geo-float 15s ease-in-out infinite;
                 }
             `}</style>
 
-            {/* Ambient Background Effects */}
+            {/* Ambient Background Effects (Geometric Light Theme) */}
             <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-                <div className="absolute top-1/4 left-[-10%] w-[500px] h-[500px] bg-amber-900/10 rounded-full blur-[120px] animate-float-slow" />
-                <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-blue-900/5 rounded-full blur-[150px] animate-float-slower" />
+                <div className="absolute top-[15%] left-[5%] w-[400px] h-[400px] border-[40px] border-amber-500/10 rounded-3xl animate-geo-spin" />
+                <div className="absolute bottom-[10%] right-[5%] w-[300px] h-[300px] border-[30px] border-blue-600/5 rounded-full animate-geo-float" />
+                <div className="absolute top-[40%] right-[20%] w-[150px] h-[150px] bg-amber-400/10 rotate-45 animate-geo-spin-slow" />
             </div>
 
             <main className="flex-grow flex flex-col relative z-10 w-full px-6 py-24 md:py-32">
@@ -137,10 +144,10 @@ export default function ServicesPage() {
                         <h2 className="text-amber-500 tracking-[0.3em] text-xs font-bold uppercase mb-4">
                             The Dominion of Build
                         </h2>
-                        <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500 leading-tight mb-8">
+                        <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 leading-tight mb-8">
                             Mastery in Every Discipline.
                         </h1>
-                        <p className="text-gray-400 text-lg font-light leading-relaxed">
+                        <p className="text-slate-600 text-lg font-light leading-relaxed">
                             From the earth, we command structure. Explore our suite of sovereign services, dedicated to the pursuit of permanence, precision, and architectural excellence.
                         </p>
                     </AnimateOnScroll>
@@ -160,14 +167,14 @@ export default function ServicesPage() {
                     </div>
 
                     {/* Call to Action Section */}
-                    <AnimateOnScroll direction="up" className="mt-32 text-center bg-white/5 backdrop-blur-sm border border-white/10 p-12 md:p-16 rounded-3xl relative overflow-hidden group">
+                    <AnimateOnScroll direction="up" className="mt-32 text-center bg-white shadow-2xl shadow-slate-200/50 border border-slate-100 p-12 md:p-16 rounded-3xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 relative z-10">Ready to build your kingdom?</h2>
-                        <p className="text-gray-400 max-w-xl mx-auto mb-10 relative z-10">
+                        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 relative z-10">Ready to build your kingdom?</h2>
+                        <p className="text-slate-600 max-w-xl mx-auto mb-10 relative z-10 font-light">
                             Consult with our chief architects and engineers to begin laying the foundation for your next grand endeavor.
                         </p>
                         <Link href="/contact" className="inline-flex items-center justify-center relative z-10 px-8 py-4 bg-transparent overflow-hidden rounded-full border border-amber-500 hover:bg-amber-500 transition-all duration-300 group/btn">
-                            <span className="text-amber-500 group-hover/btn:text-black font-bold tracking-widest text-sm uppercase transition-colors">
+                            <span className="text-amber-600 group-hover/btn:text-white font-bold tracking-widest text-sm uppercase transition-colors">
                                 Enquiry Now
                             </span>
                         </Link>
@@ -182,34 +189,34 @@ export default function ServicesPage() {
 // Sub-component for the individual service cards
 function ServiceCard({ title, subtitle, description, icon }: { title: string, subtitle: string, description: string, icon: React.ReactNode }) {
     return (
-        <div className="h-full group relative bg-white/5 backdrop-blur-sm border border-white/10 p-8 md:p-10 rounded-2xl transition-all duration-500 hover:border-amber-500/50 hover:bg-white/[0.07] hover:-translate-y-1">
+        <div className="h-full group relative bg-white shadow-md border border-slate-100 p-8 md:p-10 rounded-2xl transition-all duration-500 hover:border-amber-400 hover:shadow-xl hover:-translate-y-1 overflow-hidden">
             
             {/* Top Accent Line */}
-            <div className="absolute top-0 left-0 w-0 h-[2px] bg-amber-500 transition-all duration-500 group-hover:w-full rounded-t-2xl"></div>
+            <div className="absolute top-0 left-0 w-0 h-[3px] bg-amber-500 transition-all duration-500 group-hover:w-full rounded-t-2xl"></div>
 
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-full relative z-10">
                 {/* Icon & Subtitle */}
                 <div className="flex items-center gap-6 mb-8">
-                    <div className="p-4 bg-neutral-900 border border-white/10 rounded-xl text-amber-500 group-hover:scale-110 group-hover:bg-amber-500/10 transition-all duration-500">
+                    <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl text-amber-500 group-hover:scale-110 group-hover:bg-amber-50 transition-all duration-500">
                         {icon}
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-amber-500 text-xs font-bold uppercase tracking-[0.2em] mb-1">
+                        <span className="text-amber-600 text-xs font-bold uppercase tracking-[0.2em] mb-1">
                             {subtitle}
                         </span>
                     </div>
                 </div>
 
                 {/* Title & Description */}
-                <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">
                     {title}
                 </h3>
-                <p className="text-gray-400 font-light leading-relaxed flex-grow">
+                <p className="text-slate-600 font-light leading-relaxed flex-grow">
                     {description}
                 </p>
 
                 {/* Optional 'Learn More' interaction element */}
-                <div className="mt-8 pt-6 border-t border-white/10 flex items-center text-sm font-bold tracking-widest uppercase text-gray-500 group-hover:text-white transition-colors cursor-pointer w-max">
+                <div className="mt-8 pt-6 border-t border-slate-100 flex items-center text-sm font-bold tracking-widest uppercase text-slate-400 group-hover:text-amber-600 transition-colors cursor-pointer w-max">
                     <span className="mr-4">Explore Discipline</span>
                     <svg className="w-4 h-4 transform group-hover:translate-x-2 transition-transform duration-300 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
