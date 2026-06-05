@@ -237,16 +237,7 @@ export default function Home() {
             <main className="flex-grow flex flex-col items-center w-full relative z-10 pb-20">
 
                 {/* =========================================
-                    SECTION 1: 3D CONSTRUCTION CAROUSEL
-                    ========================================= */}
-                <section className="w-full py-10 px-4">
-                    <AnimateOnScroll direction="up">
-                        <HomeCarousel />
-                    </AnimateOnScroll>
-                </section>
-
-                {/* =========================================
-                    SECTION 1.5: HERO
+                    SECTION 1: HERO
                     ========================================= */}
                 <section className="w-full min-h-[80vh] flex justify-center items-center p-6 md:p-20 relative overflow-hidden mt-10">
                     <div className="flex flex-col md:flex-row-reverse items-center gap-12 md:gap-24 max-w-7xl w-full bg-white/40 backdrop-blur-sm p-8 md:p-12 rounded-3xl shadow-2xl shadow-slate-200/50 border border-white">
@@ -317,6 +308,15 @@ export default function Home() {
                             </AnimateOnScroll>
                         ))}
                     </div>
+                </section>
+
+                {/* =========================================
+                    SECTION 1: 3D CONSTRUCTION CAROUSEL
+                    ========================================= */}
+                <section className="w-full py-10 px-4">
+                    <AnimateOnScroll direction="up">
+                        <HomeCarousel />
+                    </AnimateOnScroll>
                 </section>
 
                 {/* =========================================
