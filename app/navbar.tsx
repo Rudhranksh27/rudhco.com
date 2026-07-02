@@ -32,6 +32,8 @@ export default function Navbar() {
               {/* Nested Desktop Dropdown for Services */}
               <DesktopServicesDropdown pathname={pathname} />
 
+              <NavItem href="/packages" text="Packages" isActive={pathname === '/packages'} />
+
               <NavItem href="/contact" text="Contact" isActive={pathname === '/contact'} />
             </ul>
           </div>
@@ -107,6 +109,7 @@ export default function Navbar() {
             </li>
 
             <MobileNavItem href="/contact" text="Contact" onClick={() => setIsOpen(false)} isActive={pathname === '/contact'} />
+             <MobileNavItem href="/packages" text="Packages" onClick={() => setIsOpen(false)} isActive={pathname === '/packages'} />
           </ul>
         </div>
       )}
