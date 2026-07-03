@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, ReactNode } from "react";
 import Head from "next/head";
 import Navbar from "../navbar";
 import Link from "next/link";
-// import Image from "next/image";
+import Image from "next/image";
 // NOTE: When you upload a photo of Raktim Kalita or your office, set the Alt Text to: Raktim Kalita, Director of Rudhco Infra & Tech Guwahati.
 
 // --- ANIMATION WRAPPER COMPONENT ---
@@ -162,9 +162,22 @@ export default function AboutPage() {
                             </p>
                             
                             <div className="flex flex-col md:flex-row items-center md:items-start gap-8 border-t border-slate-100 pt-8 relative z-10">
-                                <div className="w-32 h-32 rounded-full bg-slate-100 border-2 border-amber-500/50 flex-shrink-0 flex items-center justify-center text-slate-400 text-sm overflow-hidden relative group shadow-sm">
-                                    <span className="group-hover:scale-110 transition-transform duration-500">[Image]</span>
-                                </div>
+                                <Link
+                                    href="/founder.webp"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Open founder photo"
+                                    className="w-32 h-32 rounded-full bg-slate-100 border-2 border-amber-500/50 shrink-0 flex items-center justify-center text-slate-400 text-sm overflow-hidden relative group shadow-sm cursor-pointer"
+                                >
+                                    <Image
+                                        src="/founder.webp"
+                                        alt="Raktim Kalita, Director of Rudhco Infra & Tech Guwahati"
+                                        fill
+                                        sizes="128px"
+                                        className="object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                                        priority
+                                    />
+                                </Link>
                                 <div>
                                     <h3 className="text-2xl font-bold text-amber-600 mb-2">Raktim Kalita</h3>
                                     <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Founder & Director</p>

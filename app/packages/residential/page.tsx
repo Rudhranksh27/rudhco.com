@@ -1,4 +1,7 @@
-  import Navbar from "../navbar";
+"use client";
+
+import { useState } from "react";
+import Navbar from "../../navbar";
 
 type PackageRow = {
   item: string;
@@ -19,7 +22,7 @@ const packageData: PackageSpec[] = [
       { item: "Cement", value: "DALMIA, STAR CEMENT, DURAGUARD" },
       { item: "TMT Steel", value: "DURGAPUR 500D" },
       { item: "Flooring", value: "2x2 NANO TILES" },
-      { item: "Windows", value: "ALUMINIUM WINDOW" }, 
+      { item: "Windows", value: "ALUMINIUM WINDOW" },
       { item: "Room Doors", value: "PLYWOOD DOORS" },
       { item: "Toilet Door", value: "PVC DOORS" },
       { item: "Door Frame", value: "MS STEEL FRAMES" },
@@ -31,7 +34,7 @@ const packageData: PackageSpec[] = [
       { item: "Sanitary", value: "HINDWARE" },
       { item: "Kitchen", value: "CONCRETE RCC SLAB" },
     ],
-  },  
+  },
   {
     name: "Standard Package",
     rate: "1985/sq.ft",
@@ -75,78 +78,87 @@ const packageData: PackageSpec[] = [
 ];
 
 function PackageTable({ pkg }: { pkg: PackageSpec }) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggleRow = (index: number) => {
+    setOpenIndex((prev) => (prev === index ? null : index));
+  };
+
   return (
-    <section className="relative bg-white/90 backdrop-blur-sm border border-slate-200 rounded-3xl shadow-xl shadow-slate-200/50 overflow-hidden">
-      <div className="absolute -top-20 -right-16 w-52 h-52 rounded-full bg-amber-200/20 blur-2xl pointer-events-none" />
-      <div className="px-5 md:px-8 py-6 md:py-8 text-center border-b border-slate-200 bg-linear-to-b from-white to-slate-50 relative">
-        <h2 className="text-2xl md:text-4xl font-bold tracking-wide text-slate-900 uppercase">
+    <section className="relative bg-slate-100/90 border border-slate-300 rounded-3xl shadow-lg overflow-hidden">
+      <div className="px-5 md:px-8 py-4 md:py-5 min-h-28 md:min-h-32 flex flex-col items-center justify-center text-center border-b border-slate-300 bg-slate-50 relative">
+        <h2 className="min-h-16 md:min-h-19 flex items-center justify-center text-[2rem] md:text-[44px] leading-[0.95] font-bold tracking-wide text-slate-900 uppercase md:whitespace-nowrap">
           {pkg.name}
         </h2>
-        <p className="mt-2 text-slate-700 font-semibold tracking-wide">Rate: Rs {pkg.rate}</p>
+        <p className="mt-1 min-h-7 md:min-h-10 text-amber-600 text-base md:text-3xl font-semibold tracking-wide">Rate: Rs {pkg.rate}</p>
       </div>
 
-      <div className="hidden md:block overflow-x-auto">
-        <table className="w-full border-collapse">
-          <tbody>
-            {pkg.rows.map((row) => (
-              <tr key={row.item} className="border-b border-slate-300 last:border-b-0">
-                <td className="w-[36%] px-5 py-4 text-sm md:text-base font-bold uppercase tracking-wide bg-slate-200/70 border-r border-slate-300">
-                   {row.item}
-                </td>
-                <td className="w-[64%] px-5 py-4 text-sm md:text-base text-center uppercase tracking-wide bg-slate-100/70">
-                  {row.value}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <div>
+        {pkg.rows.map((row, index) => {
+          const isOpen = openIndex === index;
 
-      <div className="md:hidden p-4 space-y-3 bg-slate-50/70">
-        {pkg.rows.map((row) => (
-          <article
-            key={row.item}
-            className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
-          >
-            <p className="text-[11px] font-bold tracking-[0.18em] text-amber-600 uppercase mb-2">
-              {row.item}
-            </p>
-            <p className="text-sm font-medium text-slate-700 uppercase leading-relaxed">
-              {row.value}
-            </p>
-          </article>
-        ))}
+          return (
+            <div key={`${row.item}-${index}`} className="border-b border-slate-300 last:border-b-0">
+              <button
+                type="button"
+                onClick={() => toggleRow(index)}
+                className="w-full px-5 py-4 md:px-6 md:py-4 flex items-center justify-between text-left bg-slate-100 hover:bg-slate-200/70 transition-colors"
+              >
+                <span className="text-xl md:text-[24px] font-semibold text-slate-800 leading-none">
+                  {row.item}
+                </span>
+                <svg
+                  className={`w-6 h-6 text-slate-500 transition-transform duration-300 ${isOpen ? "rotate-90" : ""}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
+              <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+                <div className="overflow-hidden">
+                  <p className="px-5 pb-5 md:px-6 md:pb-6 text-sm md:text-base text-slate-700 font-semibold uppercase tracking-wide bg-white">
+                    {row.value}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
 }
 
-export default function PackagesPage() {
+export default function ResidentialPackagesPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
       <Navbar />
 
       <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[12%] left-[4%] w-[320px] h-[320px] border-[28px] border-amber-500/10 rounded-3xl" />
-        <div className="absolute bottom-[6%] right-[4%] w-[260px] h-[260px] border-[20px] border-blue-600/5 rounded-full" />
-        <div className="absolute top-[36%] right-[18%] w-[120px] h-[120px] bg-amber-400/10 rotate-45" />
+        <div className="absolute top-[12%] left-[4%] w-80 h-80 border-28 border-amber-500/10 rounded-3xl" />
+        <div className="absolute bottom-[6%] right-[4%] w-65 h-65 border-20 border-blue-600/5 rounded-full" />
+        <div className="absolute top-[36%] right-[18%] w-30 h-30 bg-amber-400/10 rotate-45" />
       </div>
 
-      <main className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-28 pb-16 space-y-10 md:space-y-12">
+      <main className="relative z-10 max-w-420 mx-auto px-3 md:px-5 pt-28 pb-16">
         <section className="text-center max-w-3xl mx-auto mb-2">
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-wide uppercase">
-            Construction Packages
+            Residential Construction Packages
           </h1>
           <p className="mt-4 text-slate-600 font-light leading-relaxed">
             Choose the package that fits your budget and material preferences. Every plan is structured for transparent quality and delivery.
           </p>
         </section>
 
-        {packageData.map((pkg) => (
-          <PackageTable key={pkg.name} pkg={pkg} />
-        ))}
+        <section className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
+          {packageData.map((pkg) => (
+            <PackageTable key={pkg.name} pkg={pkg} />
+          ))}
+        </section>
       </main>
     </div>
   );
 }
-
