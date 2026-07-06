@@ -183,7 +183,7 @@ function DesktopServicesDropdown({ pathname }: { pathname: string }) {
 
             {/* Level 2 Dropdown (Side Menu) - Responsive Positioning */}
             {/* Opens LEFT on md screens (to avoid overflow), opens RIGHT on lg screens */}
-            <div className="absolute top-0 md:right-full md:left-auto md:pr-2 lg:left-full lg:right-auto lg:pl-2 lg:pr-0 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 w-70">
+            <div className="absolute top-0 md:right-full md:right-auto md:pr-2 lg:right-full lg:right-auto lg:pl-2 lg:pr-0 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 w-70">
               <div className="bg-white/95 backdrop-blur-xl border border-slate-200 rounded-xl shadow-xl py-2">
                 <DropdownLink href="/residential" text="Residential Construction" />
                 <DropdownLink href="/commercial" text="Commercial Construction" />

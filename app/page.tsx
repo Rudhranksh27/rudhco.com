@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, ReactNode } from "react";
 import Navbar from "./navbar";
 import Link from "next/link";
 import Image from 'next/image';
-import HomeOutline from '../images/home01.png';
+import HomeOutline from '../images/Home Page image.webp';
 
 // --- ANIMATION WRAPPER COMPONENT ---
 interface AnimateOnScrollProps {
