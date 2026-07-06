@@ -236,25 +236,6 @@ export default function ResidentialPackagesPage() {
                     </div>
                 </section>
 
-                {/* --- WHY CHOOSE US SECTION --- */}
-                <section className="w-full bg-slate-100 border-y border-slate-200 py-24 mt-24 relative overflow-hidden">
-                    <div className="max-w-7xl mx-auto px-6 relative z-10">
-                        <AnimateOnScroll direction="up" className="text-center mb-16">
-                            <h2 className="text-amber-500 tracking-[0.3em] text-xs font-bold uppercase mb-4">The Rudhco Standard</h2>
-                            <h3 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Why Choose Us</h3>
-                            <div className="w-16 h-1 bg-amber-500 mx-auto opacity-80"></div>
-                        </AnimateOnScroll>
-                        <div className="flex flex-wrap justify-center gap-6">
-                            {["Experienced Team", "Quality Materials", "On-Time Delivery", "Transparent Pricing", "End-to-End Service"].map((item, idx) => (
-                                <AnimateOnScroll key={idx} direction="up" delay={idx * 100} className="flex items-center gap-3 bg-white shadow-md border border-slate-100 px-8 py-4 rounded-full">
-                                    <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                                    <span className="font-medium text-slate-700">{item}</span>
-                                </AnimateOnScroll>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
                 {/* --- MEGA CTA SECTION --- */}
                 <section className="w-full pt-24 px-6">
                     <AnimateOnScroll direction="none" className="max-w-5xl mx-auto text-center bg-white shadow-2xl shadow-slate-200/50 border border-slate-100 p-12 md:p-20 rounded-3xl relative overflow-hidden">
