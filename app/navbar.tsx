@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false); // State for mobile services dropdown
+  const [isMobilePackagesOpen, setIsMobilePackagesOpen] = useState(false);
   const pathname = usePathname();
 
   return (
@@ -32,7 +33,7 @@ export default function Navbar() {
               {/* Nested Desktop Dropdown for Services */}
               <DesktopServicesDropdown pathname={pathname} />
 
-              <NavItem href="/packages" text="Packages" isActive={pathname === '/packages'} />
+              <DesktopPackagesDropdown pathname={pathname} />
 
               <NavItem href="/contact" text="Contact" isActive={pathname === '/contact'} />
             </ul>
@@ -92,7 +93,7 @@ export default function Navbar() {
               </div>
               
               {/* Expanded Mobile Links */}
-              <div className={`overflow-hidden transition-all duration-300 w-full px-6 flex flex-col items-center ${isMobileServicesOpen ? 'max-h-[500px] mt-2 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className={`overflow-hidden transition-all duration-300 w-full px-6 flex flex-col items-center ${isMobileServicesOpen ? 'max-h-125 mt-2 opacity-100' : 'max-h-0 opacity-0'}`}>
                 <div className="w-full bg-slate-50 border border-slate-100 rounded-xl py-4 flex flex-col items-center space-y-4">
                     <div className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase">Construction</div>
                     <MobileSubNavItem href="/residential" text="Residential Construction" onClick={() => setIsOpen(false)} />
@@ -100,7 +101,7 @@ export default function Navbar() {
                     <MobileSubNavItem href="/services#renovation" text="Renovation & Remodelling" onClick={() => setIsOpen(false)} />
                     <MobileSubNavItem href="/services#interior" text="Interior Design & Turnkey" onClick={() => setIsOpen(false)} />
                     
-                    <div className="w-12 h-[1px] bg-slate-200 my-2"></div>
+                    <div className="w-12 h-px bg-slate-200 my-2"></div>
                     
                     <div className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase">Digital</div>
                     <MobileSubNavItem href="/digital_marketing/digital_home" text="Digital Services" onClick={() => setIsOpen(false)} />
@@ -108,8 +109,40 @@ export default function Navbar() {
               </div>
             </li>
 
+            {/* Mobile Packages Accordion */}
+            <li className="w-full flex flex-col items-center">
+              <div className="flex items-center justify-center gap-1">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsMobilePackagesOpen(!isMobilePackagesOpen);
+                  }}
+                  className={`text-sm font-medium tracking-widest uppercase transition-colors py-2 ${pathname.includes('/packages') ? 'text-amber-600' : 'text-slate-700 hover:text-amber-500'}`}
+                >
+                  Packages
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsMobilePackagesOpen(!isMobilePackagesOpen);
+                  }}
+                  className={`p-2 transition-colors ${pathname.includes('/packages') ? 'text-amber-600' : 'text-slate-600 hover:text-amber-500'}`}
+                >
+                  <svg className={`w-5 h-5 transition-transform duration-300 ${isMobilePackagesOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className={`overflow-hidden transition-all duration-300 w-full px-6 flex flex-col items-center ${isMobilePackagesOpen ? 'max-h-70 mt-2 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className="w-full bg-slate-50 border border-slate-100 rounded-xl py-4 flex flex-col items-center space-y-4">
+                  <MobileSubNavItem href="/packages/residential" text="Residential Construction Packages" onClick={() => setIsOpen(false)} />
+                  <MobileSubNavItem href="/packages/commercial" text="Commercial Construction Packages" onClick={() => setIsOpen(false)} />
+                </div>
+              </div>
+            </li>
+
             <MobileNavItem href="/contact" text="Contact" onClick={() => setIsOpen(false)} isActive={pathname === '/contact'} />
-             <MobileNavItem href="/packages" text="Packages" onClick={() => setIsOpen(false)} isActive={pathname === '/packages'} />
           </ul>
         </div>
       )}
@@ -130,7 +163,7 @@ function DesktopServicesDropdown({ pathname }: { pathname: string }) {
             <span className={`text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300 ${isActive ? 'text-amber-600' : 'text-slate-600 group-hover/main:text-amber-500'}`}>
               Services
             </span>
-            <span className={`absolute bottom-0 left-0 h-[1px] bg-amber-500 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover/main:w-full'}`}></span>
+            <span className={`absolute bottom-0 left-0 h-px bg-amber-500 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover/main:w-full'}`}></span>
         </div>
       </Link>
 
@@ -150,7 +183,7 @@ function DesktopServicesDropdown({ pathname }: { pathname: string }) {
 
             {/* Level 2 Dropdown (Side Menu) - Responsive Positioning */}
             {/* Opens LEFT on md screens (to avoid overflow), opens RIGHT on lg screens */}
-            <div className="absolute top-0 md:right-full md:left-auto md:pr-2 lg:right-full lg:right-auto lg:pl-2 lg:pr-0 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 w-[280px]">
+            <div className="absolute top-0 md:right-full md:left-auto md:pr-2 lg:left-full lg:right-auto lg:pl-2 lg:pr-0 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 w-70">
               <div className="bg-white/95 backdrop-blur-xl border border-slate-200 rounded-xl shadow-xl py-2">
                 <DropdownLink href="/residential" text="Residential Construction" />
                 <DropdownLink href="/commercial" text="Commercial Construction" />
@@ -179,7 +212,7 @@ function NavItem({ href, text, isActive = false }: { href: string; text: string;
         <span className={`text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300 ${isActive ? 'text-amber-600' : 'text-slate-600 group-hover:text-amber-500'}`}>
           {text}
         </span>
-        <span className={`absolute bottom-0 left-0 h-[1px] bg-amber-500 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+        <span className={`absolute bottom-0 left-0 h-px bg-amber-500 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
       </Link>
     </li>
   );
@@ -215,5 +248,29 @@ function MobileSubNavItem({ href, text, onClick }: { href: string; text: string;
         {text}
       </span>
     </Link>
+  );
+}
+
+function DesktopPackagesDropdown({ pathname }: { pathname: string }) {
+  const isActive = pathname.includes('/packages');
+
+  return (
+    <li className="relative group/main">
+      <div className="block py-6 -my-6">
+        <div className="relative py-2 inline-block cursor-pointer">
+          <span className={`text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300 ${isActive ? 'text-amber-600' : 'text-slate-600 group-hover/main:text-amber-500'}`}>
+            Packages
+          </span>
+          <span className={`absolute bottom-0 left-0 h-px bg-amber-500 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover/main:w-full'}`}></span>
+        </div>
+      </div>
+
+      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 invisible group-hover/main:opacity-100 group-hover/main:visible transition-all duration-300 z-50 w-80">
+        <div className="bg-white/95 backdrop-blur-xl border border-slate-200 rounded-xl shadow-xl py-2">
+          <DropdownLink href="/packages/residential" text="Residential Construction Packages" />
+          <DropdownLink href="/packages/commercial" text="Commercial Construction Packages" />
+        </div>
+      </div>
+    </li>
   );
 }
