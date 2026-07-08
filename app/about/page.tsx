@@ -163,14 +163,14 @@ export default function AboutPage() {
                             
                             <div className="flex flex-col md:flex-row items-center md:items-start gap-8 border-t border-slate-100 pt-8 relative z-10">
                                 <Link
-                                    href="/founder.webp"
+                                    href="/Founder1.webp"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label="Open founder photo"
                                     className="w-32 h-32 rounded-full bg-slate-100 border-2 border-amber-500/50 shrink-0 flex items-center justify-center text-slate-400 text-sm overflow-hidden relative group shadow-sm cursor-pointer"
                                 >
                                     <Image
-                                        src="/founder.webp"
+                                        src="/Founder1.webp"
                                         alt="Raktim Kalita, Director of Rudhco Infra & Tech Guwahati"
                                         fill
                                         sizes="128px"

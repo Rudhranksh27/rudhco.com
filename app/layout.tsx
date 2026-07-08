@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: "Rudhco Infra & Tech Pvt. Ltd. - Building Your Legacy with Excellence in Construction and Technology.",
   metadataBase: new URL("https://rudhco.com"),
   alternates: {
-    canonical: "/",
+    canonical: "./",
   },
   openGraph: {
     title: "Rudhco",
@@ -54,8 +54,8 @@ const localBusinessSchema = {
   email: "business@rudhco.com",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Panjabari Rd, near Puronbasti Bus Stop, Bormotoria",
-    addressLocality: "Guwahati",
+    streetAddress: "House No-35, 3rd floor, Panjabari Road, Near Canara Bank, Panjabari Branch",
+    addressLocality: "Panjabari",
     postalCode: "781037",
     addressRegion: "Assam",
     addressCountry: "IN",

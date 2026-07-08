@@ -60,7 +60,6 @@ export default function DigitalMarketingPage() {
                 {/* SEO Integration Notes */}
                 <title>Rudhco Tech | Expert Digital Marketing & Creative Branding Agency</title>
                 <meta name="description" content="Partner with a leading digital marketing agency specializing in SEO, PPC, and brand design. We deliver data-driven results and custom web solutions." />
-                <link rel="canonical" href="https://rudhco.com/digital.marketing/" />
             </Head>
 
             <div className="flex flex-col min-h-screen font-sans bg-slate-50 text-slate-900 selection:bg-amber-500 selection:text-white overflow-x-hidden">
@@ -388,7 +387,7 @@ export default function DigitalMarketingPage() {
                                             </div>
                                             <div className="mt-1">
                                                 <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Location</p>
-                                                <p className="text-slate-700 font-medium max-w-xs leading-relaxed">Panjabari Rd, near Puronbasti Bus Stop, Bormotoria, Guwahati, Assam 781037</p>
+                                                <p className="text-slate-700 font-medium max-w-xs leading-relaxed">House No-35, 3rd floor, Panjabari Road, Near Canara Bank, Panjabari Branch, Pin - 781037, Assam</p>
                                             </div>
                                         </div>
                                     </div>

@@ -343,7 +343,7 @@ export default function CommercialConstructionPage() {
                                 </div>
                                 <div className="mt-1">
                                     <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Location</p>
-                                    <p className="text-slate-700 font-medium max-w-xs leading-relaxed">Panjabari Rd, near Puronbasti Bus Stop, Bormotoria, Guwahati, Assam 781037</p>
+                                    <p className="text-slate-700 font-medium max-w-xs leading-relaxed">House No-35, 3rd floor, Panjabari Road, Near Canara Bank, Panjabari Branch, Pin - 781037, Assam</p>
                                 </div>
                             </div>
                         </div>
