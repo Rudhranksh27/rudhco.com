@@ -71,6 +71,8 @@ export default function ContactPage() {
     const [errorMessage, setErrorMessage] = useState('');
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    const [showEstimatePopup, setShowEstimatePopup] = useState(false);
+    const [estimateData, setEstimateData] = useState<any>(null);
 
     // Update local state when a user edits any form field.
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -100,6 +102,10 @@ export default function ContactPage() {
         setFieldErrors({});
 
         try {
+            // Check for pending estimate
+            const storedEstimate = localStorage.getItem('pendingEstimate');
+            const estimatePayload = storedEstimate ? JSON.parse(storedEstimate) : null;
+
             const response = await fetch('/api/enquiry', {
                 method: 'POST',
                 headers: {
@@ -111,7 +117,8 @@ export default function ContactPage() {
                     phoneNumber: formData.phoneno,
                     service: formData.service,
                     subject: formData.subject,
-                    message: formData.message
+                    message: formData.message,
+                    estimate: estimatePayload
                 })
             });
 
@@ -148,6 +155,22 @@ export default function ContactPage() {
 
             setSuccessMessage('Thank you. Your enquiry has been submitted successfully.');
             setShowSuccessPopup(true);
+            
+            // Check for pending estimate and show it after 1 second
+            const pendingEstimate = localStorage.getItem('pendingEstimate');
+            if (pendingEstimate) {
+                const estimate = JSON.parse(pendingEstimate);
+                setEstimateData(estimate);
+                
+                // Wait 1 second before showing estimate popup
+                setTimeout(() => {
+                    setShowSuccessPopup(false);
+                    setShowEstimatePopup(true);
+                    // Clear the pending estimate from localStorage
+                    localStorage.removeItem('pendingEstimate');
+                }, 1000);
+            }
+            
             setFormData({
                 firstName: '',
                 lastName: '',
@@ -182,6 +205,76 @@ export default function ContactPage() {
                                 className="rounded-full bg-amber-500 px-5 py-2 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-amber-400"
                             >
                                 OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ) : null}
+
+            {showEstimatePopup && estimateData ? (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4">
+                    <style>{`
+                        @keyframes bounce-scale {
+                            0%, 100% { transform: scale(1); }
+                            50% { transform: scale(1.05); }
+                        }
+                        .animate-bounce-scale {
+                            animation: bounce-scale 0.6s ease-in-out infinite;
+                        }
+                        @keyframes confetti-fall {
+                            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+                            100% { transform: translateY(100px) rotate(360deg); opacity: 0; }
+                        }
+                        .confetti {
+                            animation: confetti-fall 2s ease-out forwards;
+                        }
+                    `}</style>
+                    <div className="w-full max-w-md rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-8 shadow-2xl animate-bounce-scale relative overflow-hidden">
+                        {/* Confetti emojis */}
+                        <div className="absolute top-4 left-4 text-3xl confetti">🎊</div>
+                        <div className="absolute top-6 right-6 text-3xl confetti" style={{ animationDelay: '0.2s' }}>🎉</div>
+                        <div className="absolute top-16 left-10 text-3xl confetti" style={{ animationDelay: '0.4s' }}>🎊</div>
+                        <div className="absolute top-12 right-12 text-3xl confetti" style={{ animationDelay: '0.3s' }}>🎉</div>
+
+                        <div className="text-center">
+                            <h3 className="text-2xl font-bold text-slate-900 mb-2">Your Estimate is Ready! 🎊</h3>
+                            <p className="text-amber-600 text-sm font-semibold mb-6">{estimateData.packageName}</p>
+
+                            <div className="bg-white border-2 border-amber-400 rounded-lg p-6 mb-6">
+                                <p className="text-sm text-slate-600 mb-1">Project Details</p>
+                                <div className="space-y-2 text-left mb-4">
+                                    <p className="text-sm"><span className="font-semibold text-slate-900">Type:</span> <span className="text-slate-600">{estimateData.houseType}</span></p>
+                                    <p className="text-sm"><span className="font-semibold text-slate-900">Area:</span> <span className="text-slate-600">{estimateData.sqftArea.toLocaleString()} Sq.ft</span></p>
+                                    <p className="text-sm"><span className="font-semibold text-slate-900">Rate:</span> <span className="text-slate-600">Rs {estimateData.pricePerSqft.toLocaleString("en-IN")}/sq.ft</span></p>
+                                    <p className="text-sm"><span className="font-semibold text-slate-900">Multiplier:</span> <span className="text-slate-600">{estimateData.multiplier}x</span></p>
+                                </div>
+
+                                <div className="border-t-2 border-amber-200 pt-4">
+                                    <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide mb-1">Calculation</p>
+                                    <p className="text-xs text-slate-600 mb-3">Rs {estimateData.pricePerSqft.toLocaleString("en-IN")} × {estimateData.multiplier} × {estimateData.sqftArea.toLocaleString()}</p>
+                                    <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide mb-1">Estimated Total Cost</p>
+                                    <p className="text-4xl font-bold text-amber-600">
+                                        Rs {estimateData.estimatedCost.toLocaleString("en-IN")}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-center gap-2 mb-4">
+                                <span className="text-2xl">🎉</span>
+                                <span className="text-2xl">🎊</span>
+                                <span className="text-2xl">🎉</span>
+                            </div>
+
+                            <p className="text-sm text-slate-600 mb-6">
+                                Our team will connect with you shortly to discuss your project details.
+                            </p>
+
+                            <button
+                                type="button"
+                                onClick={() => setShowEstimatePopup(false)}
+                                className="rounded-full bg-amber-500 px-8 py-3 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-amber-600"
+                            >
+                                Close
                             </button>
                         </div>
                     </div>

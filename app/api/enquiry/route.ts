@@ -9,6 +9,15 @@ interface EnquiryPayload {
 	service: string;
 	subject?: string;
 	message: string;
+	estimate?: {
+		packageName: string;
+		pricePerSqft: number;
+		sqftArea: number;
+		houseType: string;
+		multiplier: number;
+		estimatedCost: number;
+		timestamp: number;
+	};
 }
 
 type ValidationErrors = Partial<Record<keyof EnquiryPayload, string>>;
@@ -53,6 +62,7 @@ export async function POST(request: Request) {
 			service: body.service?.trim() || "",
 			subject: body.subject?.trim() || "",
 			message: body.message?.trim() || "",
+			estimate: body.estimate || undefined,
 		};
 
 		// Validate incoming data before any side effect.
@@ -79,6 +89,7 @@ export async function POST(request: Request) {
 			service: payload.service,
 			subject: payload.subject || null,
 			message: payload.message,
+			estimate: payload.estimate || null,
 			status: "New",
 			createdAt,
 		};
@@ -93,6 +104,7 @@ export async function POST(request: Request) {
 			service: payload.service,
 			subject: payload.subject,
 			message: payload.message,
+			estimate: payload.estimate,
 			createdAt,
 		});
 

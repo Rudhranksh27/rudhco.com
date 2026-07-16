@@ -130,12 +130,149 @@ const packageData: PackageSpec[] = [
     },
 ];
 
+// --- ESTIMATE MODAL COMPONENT ---
+interface EstimateModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    packageName: string;
+    pricePerSqft: number;
+}
+
+function EstimateModal({ isOpen, onClose, packageName, pricePerSqft }: EstimateModalProps) {
+    const [sqftArea, setSqftArea] = useState<string>("");
+    const [houseType, setHouseType] = useState<string>("");
+
+    if (!isOpen) return null;
+
+    const handleGenerateEstimate = () => {
+        if (!sqftArea || !houseType) {
+            alert("Please fill in all fields");
+            return;
+        }
+
+        // Calculate multiplier based on house type
+        const multipliers: Record<string, number> = {
+            "Ground Floor": 1,
+            "G+1": 2,
+            "G+2": 3,
+            "G+3": 4
+        };
+
+        const multiplier = multipliers[houseType] || 1;
+        const estimatedCost = pricePerSqft * multiplier * parseFloat(sqftArea);
+        
+        const estimateData = {
+            packageName,
+            pricePerSqft,
+            sqftArea: parseFloat(sqftArea),
+            houseType,
+            multiplier,
+            estimatedCost,
+            timestamp: Date.now()
+        };
+
+        // Store estimate in localStorage
+        localStorage.setItem("pendingEstimate", JSON.stringify(estimateData));
+
+        // Redirect to contact page
+        window.location.href = "/contact";
+    };
+
+    return (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 relative animate-in fade-in duration-300">
+                <button
+                    onClick={onClose}
+                    className="absolute top-6 right-6 text-slate-400 hover:text-slate-900 transition-colors"
+                >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+                <div className="mb-8">
+                    <h2 className="text-2xl font-bold text-slate-900 mb-2">Get Estimate</h2>
+                    <p className="text-slate-600 text-sm">{packageName}</p>
+                </div>
+
+                <div className="space-y-6">
+                    <div>
+                        <label className="block text-sm font-semibold text-slate-700 mb-2">
+                            Rate per Sq.ft
+                        </label>
+                        <div className="px-4 py-3 bg-slate-50 rounded-lg border border-slate-200">
+                            <p className="text-lg font-bold text-amber-600">Rs {pricePerSqft.toLocaleString("en-IN")}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label htmlFor="houseType" className="block text-sm font-semibold text-slate-700 mb-2">
+                            Type of House *
+                        </label>
+                        <select
+                            id="houseType"
+                            value={houseType}
+                            onChange={(e) => setHouseType(e.target.value)}
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-amber-500 focus:outline-none text-slate-900 bg-white"
+                        >
+                            <option value="">Select House Type</option>
+                            <option value="Ground Floor">Ground Floor</option>
+                            <option value="G+1">G+1</option>
+                            <option value="G+2">G+2</option>
+                            <option value="G+3">G+3</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label htmlFor="sqft" className="block text-sm font-semibold text-slate-700 mb-2">
+                            Enter Your Sqft Area *
+                        </label>
+                        <input
+                            id="sqft"
+                            type="number"
+                            placeholder="e.g., 1000"
+                            value={sqftArea}
+                            onChange={(e) => setSqftArea(e.target.value)}
+                            className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-amber-500 focus:outline-none text-slate-900 placeholder-slate-400"
+                        />
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
+                        <button
+                            onClick={onClose}
+                            className="flex-1 px-4 py-3 border-2 border-slate-200 rounded-lg text-slate-900 font-semibold hover:bg-slate-50 transition-colors"
+                        >
+                            Close
+                        </button>
+                        <button
+                            onClick={handleGenerateEstimate}
+                            className="flex-1 px-4 py-3 bg-amber-500 rounded-lg text-white font-semibold hover:bg-amber-600 transition-colors"
+                        >
+                            Generate Estimate
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 // --- COMPACT PACKAGE CARD COMPONENT ---
 function PackageCard({ pkg, index }: { pkg: PackageSpec; index: number }) {
-    const [openIndex, setOpenIndex] = useState<number | null>(null);
+    const [openIndices, setOpenIndices] = useState<Set<number>>(new Set());
+    const [showEstimate, setShowEstimate] = useState(false);
+    const pricePerSqft = parseInt(pkg.rate.split("/")[0]);
 
-    const toggleRow = (index: number) => {
-        setOpenIndex((prev) => (prev === index ? null : index));
+    const toggleRow = (rowIndex: number) => {
+        setOpenIndices((prev) => {
+            const newSet = new Set(prev);
+            if (newSet.has(rowIndex)) {
+                newSet.delete(rowIndex);
+            } else {
+                newSet.add(rowIndex);
+            }
+            return newSet;
+        });
     };
 
     // Assigning a unique faint animated gradient to each card
@@ -146,54 +283,69 @@ function PackageCard({ pkg, index }: { pkg: PackageSpec; index: number }) {
     ][index % 3];
 
     return (
-        // Changed bg-white/70 to bg-white/80 and boosted the gradient intensity
-        <div className={`flex flex-col bg-gradient-to-br ${gradientClasses} bg-[length:200%_200%] animate-gradient-xy backdrop-blur-md border border-white/80 p-6 rounded-3xl shadow-2xl hover:border-amber-400 hover:-translate-y-2 transition-all duration-500`}>
-            {/* Header */}
-            <h3 className="text-2xl font-bold text-slate-900 mb-1">{pkg.name}</h3>
-            <div className="text-xl font-bold text-amber-600 mb-6 pb-4 border-b border-slate-900/10">
-                Rs {pkg.rate}
-            </div>
+        <>
+            <EstimateModal
+                isOpen={showEstimate}
+                onClose={() => setShowEstimate(false)}
+                packageName={pkg.name}
+                pricePerSqft={pricePerSqft}
+            />
+            <div className={`flex flex-col bg-gradient-to-br ${gradientClasses} bg-[length:200%_200%] animate-gradient-xy backdrop-blur-md border border-white/80 p-6 rounded-3xl shadow-2xl hover:border-amber-400 hover:-translate-y-2 transition-all duration-500`}>
+                {/* Header */}
+                <h3 className="text-2xl font-bold text-slate-900 mb-1">{pkg.name}</h3>
+                <div className="text-xl font-bold text-amber-600 mb-6 pb-4 border-b border-slate-900/10">
+                    Rs {pkg.rate}
+                </div>
 
-{/* Compact Accordion List */}
-            <div className="flex-grow space-y-2 mb-8 relative z-10">
-                {pkg.rows.map((row, rowIndex) => {
-                    const isOpen = openIndex === rowIndex;
-                    return (
-                        <div key={rowIndex} className="border border-slate-900/10 rounded-lg overflow-hidden bg-white/50 backdrop-blur-sm">
-                            <button
-                                type="button"
-                                onClick={() => toggleRow(rowIndex)}
-                                className="w-full py-2.5 px-4 flex items-center justify-between text-left hover:bg-white/80 transition-colors"
-                            >
-                                <span className="text-sm font-semibold text-slate-900">
-                                    {row.item}
-                                </span>
-                                <svg
-                                    className={`w-4 h-4 text-slate-500 transition-transform duration-300 ${isOpen ? "rotate-90" : ""}`}
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
+                {/* Compact Accordion List */}
+                <div className="flex-grow space-y-2 mb-8 relative z-10">
+                    {pkg.rows.map((row, rowIndex) => {
+                        const isOpen = openIndices.has(rowIndex);
+                        return (
+                            <div key={rowIndex} className="border border-slate-900/10 rounded-lg overflow-hidden bg-white/50 backdrop-blur-sm">
+                                <button
+                                    type="button"
+                                    onClick={() => toggleRow(rowIndex)}
+                                    className="w-full py-2.5 px-4 flex items-center justify-between text-left hover:bg-white/80 transition-colors"
                                 >
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                </svg>
-                            </button>
-                            <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
-                                <div className="overflow-hidden">
-                                    <p className="px-4 pb-3 text-xs text-slate-700 font-medium uppercase tracking-wide">
-                                        {row.value}
-                                    </p>
+                                    <span className="text-sm font-semibold text-slate-900">
+                                        {row.item}
+                                    </span>
+                                    <svg
+                                        className={`w-4 h-4 text-slate-500 transition-transform duration-300 ${isOpen ? "rotate-90" : ""}`}
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+                                <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+                                    <div className="overflow-hidden">
+                                        <p className="px-4 pb-3 text-xs text-slate-700 font-medium uppercase tracking-wide">
+                                            {row.value}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    );
-                })}
-            </div>
+                        );
+                    })}
+                </div>
 
-            {/* Action Button */}
-            <Link href="/contact" className="relative z-10 w-full py-4 rounded-full bg-slate-900 text-white text-center text-xs font-bold uppercase tracking-widest hover:bg-amber-500 transition-colors shadow-md mt-auto">
-                Select Package
-            </Link>
-        </div>
+                {/* Action Buttons */}
+                <div className="relative z-10 flex gap-3 mt-auto">
+                    <button
+                        onClick={() => setShowEstimate(true)}
+                        className="flex-1 py-4 rounded-full bg-amber-500 text-white text-center text-xs font-bold uppercase tracking-widest hover:bg-amber-600 transition-colors shadow-md"
+                    >
+                        Get Estimate
+                    </button>
+                    <Link href="/contact" className="flex-1 py-4 rounded-full bg-slate-900 text-white text-center text-xs font-bold uppercase tracking-widest hover:bg-slate-700 transition-colors shadow-md">
+                        Select Package
+                    </Link>
+                </div>
+            </div>
+        </>
     );
 }
 

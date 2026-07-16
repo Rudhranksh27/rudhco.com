@@ -10,6 +10,15 @@ export interface EnquiryEmailPayload {
   subject?: string;
   message: string;
   createdAt: Date;
+  estimate?: {
+    packageName: string;
+    pricePerSqft: number;
+    sqftArea: number;
+    houseType: string;
+    multiplier: number;
+    estimatedCost: number;
+    timestamp: number;
+  };
 }
 
 function getResendClient(): Resend {
@@ -72,6 +81,20 @@ function buildCompanyNotificationHtml(payload: EnquiryEmailPayload): string {
           ${buildRow("Service", payload.service)}
           ${buildRow("Subject", payload.subject?.trim() || "-")}
           ${buildRow("Message", payload.message)}
+          ${payload.estimate ? `
+            <tr style="background-color: #fef3c7; font-weight: bold;">
+              <td colspan="2" style="padding: 12px; border: 1px solid #e2e8f0;">
+                📊 ESTIMATE DETAILS
+              </td>
+            </tr>
+            ${buildRow("Package Name", payload.estimate.packageName)}
+            ${buildRow("House Type", payload.estimate.houseType)}
+            ${buildRow("Sqft Area", payload.estimate.sqftArea.toLocaleString())}
+            ${buildRow("Rate per Sqft", `Rs ${payload.estimate.pricePerSqft.toLocaleString("en-IN")}`)}
+            ${buildRow("Multiplier", `${payload.estimate.multiplier}x`)}
+            ${buildRow("Calculation", `Rs ${payload.estimate.pricePerSqft.toLocaleString("en-IN")} × ${payload.estimate.multiplier} × ${payload.estimate.sqftArea.toLocaleString()}`)}
+            ${buildRow("Estimated Cost", `Rs ${payload.estimate.estimatedCost.toLocaleString("en-IN")}`)}
+          ` : ''}
           ${buildRow("Status", "New")}
           ${buildRow("Created At", payload.createdAt.toISOString())}
         </tbody>
