@@ -5,6 +5,8 @@ import Head from "next/head";
 import Navbar from "../navbar";
 import Link from "next/link";
 import Image from "next/image";
+import Founder from '../../images/founder1.webp';
+
 // NOTE: When you upload a photo of Raktim Kalita or your office, set the Alt Text to: Raktim Kalita, Director of Rudhco Infra & Tech Guwahati.
 
 // --- ANIMATION WRAPPER COMPONENT ---
@@ -163,14 +165,14 @@ export default function AboutPage() {
                             
                             <div className="flex flex-col md:flex-row items-center md:items-start gap-8 border-t border-slate-100 pt-8 relative z-10">
                                 <Link
-                                    href="/Founder1.webp"
-                                    target="_blank"
+                                    href=''
+                                    // target="_blank"
                                     rel="noopener noreferrer"
                                     aria-label="Open founder photo"
                                     className="w-32 h-32 rounded-full bg-slate-100 border-2 border-amber-500/50 shrink-0 flex items-center justify-center text-slate-400 text-sm overflow-hidden relative group shadow-sm cursor-pointer"
                                 >
                                     <Image
-                                        src="/Founder1.webp"
+                                        src={Founder}
                                         alt="Raktim Kalita, Director of Rudhco Infra & Tech Guwahati"
                                         fill
                                         sizes="128px"
