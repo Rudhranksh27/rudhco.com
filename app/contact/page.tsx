@@ -55,46 +55,231 @@ function AnimateOnScroll({ children, direction = "up", delay = 0, className = ""
 }
 
 export default function ContactPage() {
-    // 1. State to store form data
+    // Core form state for enquiry submission.
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         phoneno: '',
         email: '',
+        service: '',
         subject: '',
         message: ''
     });
 
-    // 2. Handle input changes
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    const [showEstimatePopup, setShowEstimatePopup] = useState(false);
+    const [estimateData, setEstimateData] = useState<any>(null);
+
+    // Update local state when a user edits any form field.
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
         }));
+
+        // Clear field-level error for a smoother correction flow.
+        if (fieldErrors[name]) {
+            setFieldErrors(prev => {
+                const next = { ...prev };
+                delete next[name];
+                return next;
+            });
+        }
     };
 
-    // 3. Handle Form Submission
-    const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
+    // Submit the form to our API endpoint instead of using mailto.
+    const handleSend = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
-        const { firstName, lastName, phoneno, email, subject, message } = formData;
-        // Construct the email body        
-        const emailBody = `
-            Name: ${firstName} ${lastName}
-            Phone: ${phoneno}
-            Email: ${email}
-            Message: ${message}
-        `;
 
-        const mailtoLink = `mailto:business@rudhco.com?subject=${encodeURIComponent(subject || 'New Contact Inquiry')}&body=${encodeURIComponent(emailBody)}`;
-        // Trigger the email client
-        window.location.href = mailtoLink;
+        setIsSubmitting(true);
+        setSuccessMessage('');
+        setErrorMessage('');
+        setFieldErrors({});
+
+        try {
+            // Check for pending estimate
+            const storedEstimate = localStorage.getItem('pendingEstimate');
+            const estimatePayload = storedEstimate ? JSON.parse(storedEstimate) : null;
+
+            const response = await fetch('/api/enquiry', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    fullName: `${formData.firstName} ${formData.lastName}`.trim(),
+                    email: formData.email,
+                    phoneNumber: formData.phoneno,
+                    service: formData.service,
+                    subject: formData.subject,
+                    message: formData.message,
+                    estimate: estimatePayload
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                if (data?.errors && typeof data.errors === 'object') {
+                    const nextErrors: Record<string, string> = {};
+                    if (data.errors.fullName) {
+                        nextErrors.firstName = data.errors.fullName;
+                        nextErrors.lastName = data.errors.fullName;
+                    }
+                    if (data.errors.phoneNumber) {
+                        nextErrors.phoneno = data.errors.phoneNumber;
+                    }
+                    if (data.errors.email) {
+                        nextErrors.email = data.errors.email;
+                    }
+                    if (data.errors.service) {
+                        nextErrors.service = data.errors.service;
+                    }
+                    if (data.errors.subject) {
+                        nextErrors.subject = data.errors.subject;
+                    }
+                    if (data.errors.message) {
+                        nextErrors.message = data.errors.message;
+                    }
+                    setFieldErrors(nextErrors);
+                }
+
+                setErrorMessage(data?.message || 'Unable to submit your enquiry right now.');
+                return;
+            }
+
+            setSuccessMessage('Thank you. Your enquiry has been submitted successfully.');
+            setShowSuccessPopup(true);
+            
+            // Check for pending estimate and show it after 1 second
+            const pendingEstimate = localStorage.getItem('pendingEstimate');
+            if (pendingEstimate) {
+                const estimate = JSON.parse(pendingEstimate);
+                setEstimateData(estimate);
+                
+                // Wait 1 second before showing estimate popup
+                setTimeout(() => {
+                    setShowSuccessPopup(false);
+                    setShowEstimatePopup(true);
+                    // Clear the pending estimate from localStorage
+                    localStorage.removeItem('pendingEstimate');
+                }, 1000);
+            }
+            
+            setFormData({
+                firstName: '',
+                lastName: '',
+                phoneno: '',
+                email: '',
+                service: '',
+                subject: '',
+                message: ''
+            });
+        } catch {
+            setErrorMessage('Network error. Please try again in a moment.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
         <div className="flex flex-col min-h-screen font-sans bg-slate-50 text-slate-900 selection:bg-amber-500 selection:text-white overflow-hidden">
             <Navbar />
+
+            {showSuccessPopup ? (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4">
+                    <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
+                        <h3 className="text-xl font-bold text-slate-900">Enquiry Submitted</h3>
+                        <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                            Thank you for contacting Rudhco. We have received your enquiry and sent a confirmation email to your inbox.
+                        </p>
+                        <div className="mt-6 flex justify-end">
+                            <button
+                                type="button"
+                                onClick={() => setShowSuccessPopup(false)}
+                                className="rounded-full bg-amber-500 px-5 py-2 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-amber-400"
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ) : null}
+
+            {showEstimatePopup && estimateData ? (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4">
+                    <style>{`
+                        @keyframes bounce-scale {
+                            0%, 100% { transform: scale(1); }
+                            50% { transform: scale(1.05); }
+                        }
+                        .animate-bounce-scale {
+                            animation: bounce-scale 0.6s ease-in-out infinite;
+                        }
+                        @keyframes confetti-fall {
+                            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+                            100% { transform: translateY(100px) rotate(360deg); opacity: 0; }
+                        }
+                        .confetti {
+                            animation: confetti-fall 2s ease-out forwards;
+                        }
+                    `}</style>
+                    <div className="w-full max-w-md rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-8 shadow-2xl animate-bounce-scale relative overflow-hidden">
+                        {/* Confetti emojis */}
+                        <div className="absolute top-4 left-4 text-3xl confetti">🎊</div>
+                        <div className="absolute top-6 right-6 text-3xl confetti" style={{ animationDelay: '0.2s' }}>🎉</div>
+                        <div className="absolute top-16 left-10 text-3xl confetti" style={{ animationDelay: '0.4s' }}>🎊</div>
+                        <div className="absolute top-12 right-12 text-3xl confetti" style={{ animationDelay: '0.3s' }}>🎉</div>
+
+                        <div className="text-center">
+                            <h3 className="text-2xl font-bold text-slate-900 mb-2">Your Estimate is Ready! 🎊</h3>
+                            <p className="text-amber-600 text-sm font-semibold mb-6">{estimateData.packageName}</p>
+
+                            <div className="bg-white border-2 border-amber-400 rounded-lg p-6 mb-6">
+                                <p className="text-sm text-slate-600 mb-1">Project Details</p>
+                                <div className="space-y-2 text-left mb-4">
+                                    <p className="text-sm"><span className="font-semibold text-slate-900">Type:</span> <span className="text-slate-600">{estimateData.houseType}</span></p>
+                                    <p className="text-sm"><span className="font-semibold text-slate-900">Area:</span> <span className="text-slate-600">{estimateData.sqftArea.toLocaleString()} Sq.ft</span></p>
+                                    <p className="text-sm"><span className="font-semibold text-slate-900">Rate:</span> <span className="text-slate-600">Rs {estimateData.pricePerSqft.toLocaleString("en-IN")}/sq.ft</span></p>
+                                    <p className="text-sm"><span className="font-semibold text-slate-900">Multiplier:</span> <span className="text-slate-600">{estimateData.multiplier}x</span></p>
+                                </div>
+
+                                <div className="border-t-2 border-amber-200 pt-4">
+                                    <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide mb-1">Calculation</p>
+                                    <p className="text-xs text-slate-600 mb-3">Rs {estimateData.pricePerSqft.toLocaleString("en-IN")} × {estimateData.multiplier} × {estimateData.sqftArea.toLocaleString()}</p>
+                                    <p className="text-xs font-semibold text-slate-600 uppercase tracking-wide mb-1">Estimated Total Cost</p>
+                                    <p className="text-4xl font-bold text-amber-600">
+                                        Rs {estimateData.estimatedCost.toLocaleString("en-IN")}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-center gap-2 mb-4">
+                                <span className="text-2xl">🎉</span>
+                                <span className="text-2xl">🎊</span>
+                                <span className="text-2xl">🎉</span>
+                            </div>
+
+                            <p className="text-sm text-slate-600 mb-6">
+                                Our team will connect with you shortly to discuss your project details.
+                            </p>
+
+                            <button
+                                type="button"
+                                onClick={() => setShowEstimatePopup(false)}
+                                className="rounded-full bg-amber-500 px-8 py-3 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-amber-600"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ) : null}
 
             {/* --- CUSTOM CSS FOR BACKGROUND ANIMATION --- */}
             <style>{`
@@ -153,6 +338,8 @@ export default function ContactPage() {
                                     placeholder="Bhardwaj" 
                                     value={formData.firstName}
                                     onChange={handleChange}
+                                    error={fieldErrors.firstName}
+                                    disabled={isSubmitting}
                                 />
                                 <InputGroup 
                                     label="Last Name" 
@@ -160,6 +347,8 @@ export default function ContactPage() {
                                     placeholder="Thengal"
                                     value={formData.lastName}
                                     onChange={handleChange}
+                                    error={fieldErrors.lastName}
+                                    disabled={isSubmitting}
                                 />
                             </div>
 
@@ -170,6 +359,8 @@ export default function ContactPage() {
                                 type="tel" 
                                 value={formData.phoneno}
                                 onChange={handleChange}
+                                error={fieldErrors.phoneno}
+                                disabled={isSubmitting}
                             />
 
                             <InputGroup 
@@ -179,6 +370,18 @@ export default function ContactPage() {
                                 type="email" 
                                 value={formData.email}
                                 onChange={handleChange}
+                                error={fieldErrors.email}
+                                disabled={isSubmitting}
+                            />
+
+                            <InputGroup 
+                                label="Service" 
+                                name="service"
+                                placeholder="Construction / Renovation / Digital Marketing"
+                                value={formData.service}
+                                onChange={handleChange}
+                                error={fieldErrors.service}
+                                disabled={isSubmitting}
                             />
                             
                             <InputGroup 
@@ -187,6 +390,8 @@ export default function ContactPage() {
                                 placeholder="General Inquiry" 
                                 value={formData.subject}
                                 onChange={handleChange}
+                                error={fieldErrors.subject}
+                                disabled={isSubmitting}
                             />
 
                             <div className="group relative">
@@ -200,16 +405,28 @@ export default function ContactPage() {
                                     placeholder="Tell us about your requirements..."
                                     value={formData.message}
                                     onChange={handleChange}
+                                    disabled={isSubmitting}
                                 ></textarea>
+                                {fieldErrors.message ? (
+                                    <p className="text-xs text-red-500 mt-2">{fieldErrors.message}</p>
+                                ) : null}
                             </div>
+
+                            {successMessage ? (
+                                <p className="text-sm text-emerald-600">{successMessage}</p>
+                            ) : null}
+                            {errorMessage ? (
+                                <p className="text-sm text-red-500">{errorMessage}</p>
+                            ) : null}
 
                             <div className="pt-4">
                                 <button 
                                     type="submit" 
-                                    className="group relative w-full py-4 bg-amber-500 overflow-hidden rounded-full shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:shadow-[0_0_30px_rgba(245,158,11,0.4)] transition-all duration-300"
+                                    disabled={isSubmitting}
+                                    className="group relative w-full py-4 bg-amber-500 overflow-hidden rounded-full shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:shadow-[0_0_30px_rgba(245,158,11,0.4)] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
                                 >
                                     <span className="relative z-10 text-white font-bold tracking-widest text-sm uppercase transition-colors">
-                                        Send Message
+                                        {isSubmitting ? 'Sending...' : 'Send Message'}
                                     </span>
                                     <div className="absolute inset-0 h-full w-full scale-0 rounded-full transition-all duration-300 group-hover:scale-100 group-hover:bg-amber-400"></div>
                                 </button>
@@ -258,7 +475,7 @@ function ContactItem({ icon, title, detail }: { icon: React.ReactNode; title: st
 }
 
 // Helper: Form Input Group
-function InputGroup({ label, placeholder, type = "text", name, value, onChange }: { label: string; placeholder: string; type?: string; name: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) {
+function InputGroup({ label, placeholder, type = "text", name, value, onChange, error, disabled = false }: { label: string; placeholder: string; type?: string; name: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; error?: string; disabled?: boolean }) {
     return (
         <div className="group relative">
             <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 group-focus-within:text-amber-600 transition-colors">
@@ -269,9 +486,11 @@ function InputGroup({ label, placeholder, type = "text", name, value, onChange }
                 name={name}
                 value={value}
                 onChange={onChange}
-                className="w-full bg-transparent border-b border-slate-300 text-slate-900 placeholder-slate-400 py-2 focus:border-amber-500 focus:outline-none transition-colors"
+                disabled={disabled}
+                className="w-full bg-transparent border-b border-slate-300 text-slate-900 placeholder-slate-400 py-2 focus:border-amber-500 focus:outline-none transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
                 placeholder={placeholder}
             />
+            {error ? <p className="text-xs text-red-500 mt-2">{error}</p> : null}
         </div>
     );
 }
