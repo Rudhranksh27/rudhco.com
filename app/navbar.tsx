@@ -219,9 +219,9 @@ function NavItem({ href, text, isActive = false }: { href: string; text: string;
 }
 
 // Helper: Desktop Dropdown Sub-Link
-function DropdownLink({ href, text }: { href: string; text: string }) {
+function DropdownLink({ href, text, onClick }: { href: string; text: string; onClick?: () => void }) {
   return (
-    <Link href={href} className="block px-5 py-3 hover:bg-slate-50 transition-colors group/item">
+    <Link href={href} onClick={onClick} className="block px-5 py-3 hover:bg-slate-50 transition-colors group/item">
       <span className="text-sm text-slate-600 group-hover/item:text-amber-600 transition-colors block">
         {text}
       </span>
@@ -253,22 +253,32 @@ function MobileSubNavItem({ href, text, onClick }: { href: string; text: string;
 
 function DesktopPackagesDropdown({ pathname }: { pathname: string }) {
   const isActive = pathname.includes('/packages');
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <li className="relative group/main">
-      <div className="block py-6 -my-6">
+    <li
+      className="relative"
+      onMouseEnter={() => setIsOpen(true)}
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      <button
+        type="button"
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="block py-6 -my-6"
+      >
         <div className="relative py-2 inline-block cursor-pointer">
-          <span className={`text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300 ${isActive ? 'text-amber-600' : 'text-slate-600 group-hover/main:text-amber-500'}`}>
+          <span className={`text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300 ${isActive ? 'text-amber-600' : 'text-slate-600 hover:text-amber-500'}`}>
             Packages
           </span>
-          <span className={`absolute bottom-0 left-0 h-px bg-amber-500 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover/main:w-full'}`}></span>
+          <span className={`absolute bottom-0 left-0 h-px bg-amber-500 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 hover:w-full'}`}></span>
         </div>
-      </div>
+      </button>
 
-      <div className="absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 invisible group-hover/main:opacity-100 group-hover/main:visible transition-all duration-300 z-50 w-80">
+      <div className={`absolute top-full left-1/2 -translate-x-1/2 pt-6 transition-all duration-300 z-50 w-80 ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
         <div className="bg-white/95 backdrop-blur-xl border border-slate-200 rounded-xl shadow-xl py-2">
-          <DropdownLink href="/packages/residential" text="Residential Construction Packages" />
-          <DropdownLink href="/packages/commercial" text="Commercial Construction Packages" />
+          <DropdownLink href="/packages/residential" text="Residential Construction Packages" onClick={() => setIsOpen(false)} />
+          <DropdownLink href="/packages/commercial" text="Commercial Construction Packages" onClick={() => setIsOpen(false)} />
         </div>
       </div>
     </li>

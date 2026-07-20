@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import Navbar from "../../navbar";
 import Link from "next/link";
 
@@ -141,6 +142,7 @@ interface EstimateModalProps {
 function EstimateModal({ isOpen, onClose, packageName, pricePerSqft }: EstimateModalProps) {
     const [sqftArea, setSqftArea] = useState<string>("");
     const [houseType, setHouseType] = useState<string>("");
+    const router = useRouter();
 
     if (!isOpen) return null;
 
@@ -175,7 +177,7 @@ function EstimateModal({ isOpen, onClose, packageName, pricePerSqft }: EstimateM
         localStorage.setItem("pendingEstimate", JSON.stringify(estimateData));
 
         // Redirect to contact page
-        window.location.href = "/contact";
+        router.push("/contact");
     };
 
     return (

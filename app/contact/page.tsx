@@ -54,6 +54,21 @@ function AnimateOnScroll({ children, direction = "up", delay = 0, className = ""
     );
 }
 
+function readPendingEstimate() {
+    if (typeof window === 'undefined') return null;
+
+    try {
+        const storedEstimate = localStorage.getItem('pendingEstimate');
+        if (!storedEstimate) return null;
+
+        const parsed = JSON.parse(storedEstimate);
+        return parsed && typeof parsed === 'object' ? parsed : null;
+    } catch {
+        localStorage.removeItem('pendingEstimate');
+        return null;
+    }
+}
+
 export default function ContactPage() {
     // Core form state for enquiry submission.
     const [formData, setFormData] = useState({
@@ -102,9 +117,7 @@ export default function ContactPage() {
         setFieldErrors({});
 
         try {
-            // Check for pending estimate
-            const storedEstimate = localStorage.getItem('pendingEstimate');
-            const estimatePayload = storedEstimate ? JSON.parse(storedEstimate) : null;
+            const estimatePayload = readPendingEstimate();
 
             const response = await fetch('/api/enquiry', {
                 method: 'POST',
@@ -122,7 +135,16 @@ export default function ContactPage() {
                 })
             });
 
-            const data = await response.json();
+            const responseText = await response.text();
+            let data: any = {};
+
+            if (responseText) {
+                try {
+                    data = JSON.parse(responseText);
+                } catch {
+                    data = { message: responseText };
+                }
+            }
 
             if (!response.ok) {
                 if (data?.errors && typeof data.errors === 'object') {
@@ -156,11 +178,9 @@ export default function ContactPage() {
             setSuccessMessage('Thank you. Your enquiry has been submitted successfully.');
             setShowSuccessPopup(true);
             
-            // Check for pending estimate and show it after 1 second
-            const pendingEstimate = localStorage.getItem('pendingEstimate');
+            const pendingEstimate = readPendingEstimate();
             if (pendingEstimate) {
-                const estimate = JSON.parse(pendingEstimate);
-                setEstimateData(estimate);
+                setEstimateData(pendingEstimate);
                 
                 // Wait 1 second before showing estimate popup
                 setTimeout(() => {
@@ -180,8 +200,9 @@ export default function ContactPage() {
                 subject: '',
                 message: ''
             });
-        } catch {
-            setErrorMessage('Network error. Please try again in a moment.');
+        } catch (error) {
+            console.error('Enquiry submission failed:', error);
+            setErrorMessage(error instanceof Error ? error.message : 'Network error. Please try again in a moment.');
         } finally {
             setIsSubmitting(false);
         }
