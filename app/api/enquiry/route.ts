@@ -37,8 +37,8 @@ function validatePayload(payload: EnquiryPayload): ValidationErrors {
 
 	if (!payload.phoneNumber?.trim()) {
 		errors.phoneNumber = "Phone Number is required.";
-	} else if (!/^[+]?[-()\d\s]{7,20}$/.test(payload.phoneNumber)) {
-		errors.phoneNumber = "Please enter a valid phone number.";
+	} else if (!/^[6-9]\d{9}$/.test(payload.phoneNumber.trim())) {
+		errors.phoneNumber = "Please enter a valid 10-digit Indian mobile number.";
 	}
 
 	if (!payload.service?.trim()) {
