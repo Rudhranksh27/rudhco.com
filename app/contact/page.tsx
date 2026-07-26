@@ -91,7 +91,11 @@ export default function ContactPage() {
 
     // Update local state when a user edits any form field.
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
+        const { name } = e.target;
+        // Strip non-digit characters for the phone field (digits only, no prefix).
+        const value = name === 'phoneno'
+            ? e.target.value.replace(/\D/g, '').slice(0, 10)
+            : e.target.value;
         setFormData(prev => ({
             ...prev,
             [name]: value
@@ -115,6 +119,20 @@ export default function ContactPage() {
         setSuccessMessage('');
         setErrorMessage('');
         setFieldErrors({});
+
+        // Client-side Indian mobile number validation.
+        const normalizedPhone = formData.phoneno.trim();
+        const indianPhoneRegex = /^[6-9]\d{9}$/;
+        if (!normalizedPhone) {
+            setFieldErrors({ phoneno: 'Phone Number is required.' });
+            setIsSubmitting(false);
+            return;
+        }
+        if (!indianPhoneRegex.test(normalizedPhone)) {
+            setFieldErrors({ phoneno: 'Enter a valid 10-digit Indian mobile number (e.g. 9876543210).' });
+            setIsSubmitting(false);
+            return;
+        }
 
         try {
             const estimatePayload = readPendingEstimate();
@@ -378,8 +396,9 @@ export default function ContactPage() {
                             <InputGroup 
                                 label="Phone Number" 
                                 name="phoneno"
-                                placeholder="Your contact number" 
-                                type="tel" 
+                                placeholder="9876543210" 
+                                type="tel"
+                                maxLength={10}
                                 value={formData.phoneno}
                                 onChange={handleChange}
                                 error={fieldErrors.phoneno}
@@ -498,7 +517,7 @@ function ContactItem({ icon, title, detail }: { icon: React.ReactNode; title: st
 }
 
 // Helper: Form Input Group
-function InputGroup({ label, placeholder, type = "text", name, value, onChange, error, disabled = false }: { label: string; placeholder: string; type?: string; name: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; error?: string; disabled?: boolean }) {
+function InputGroup({ label, placeholder, type = "text", name, value, onChange, error, disabled = false, maxLength }: { label: string; placeholder: string; type?: string; name: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; error?: string; disabled?: boolean; maxLength?: number }) {
     return (
         <div className="group relative">
             <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 group-focus-within:text-amber-600 transition-colors">
@@ -510,6 +529,7 @@ function InputGroup({ label, placeholder, type = "text", name, value, onChange, 
                 value={value}
                 onChange={onChange}
                 disabled={disabled}
+                maxLength={maxLength}
                 className="w-full bg-transparent border-b border-slate-300 text-slate-900 placeholder-slate-400 py-2 focus:border-amber-500 focus:outline-none transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
                 placeholder={placeholder}
             />
