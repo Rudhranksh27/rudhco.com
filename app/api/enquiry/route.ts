@@ -121,10 +121,10 @@ export async function POST(request: Request) {
 		return NextResponse.json(
 			{
 				success: false,
-				message: "Something went wrong while submitting your enquiry.",
+				message:
+					error instanceof Error ? error.message : String(error),
 			},
 			{ status: 500 }
 		);
 	}
 }
-
