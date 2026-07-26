@@ -1,4 +1,5 @@
 import { MongoClient } from "mongodb";
+import app from "next/app";
 
 declare global {
   var _mongoClientPromise: Promise<MongoClient> | undefined;
@@ -12,7 +13,9 @@ function getMongoUri(): string {
 
   // Build URI from individual components (for GoDaddy)
   const host = process.env.DB_HOST;
-  const port = process.env.DB_PORT || "27017";
+  // const port = process.env.DB_PORT || "27017";
+  const port = process.env.PORT || 3000;
+  // app.listen(port);
   const user = process.env.DB_USER;
   const password = process.env.DB_PASSWORD;
   const dbName = process.env.DB_NAME;
