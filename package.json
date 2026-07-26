@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build --no-turbo",
-    "export": "next build && next export",
+    "build": "next build",
+    "export": "next build --no-turbo && next export",
     "start": "node server.js",
     "lint": "eslint"
   },
