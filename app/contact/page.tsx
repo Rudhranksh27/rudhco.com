@@ -234,22 +234,24 @@ export default function ContactPage() {
 
             {showEstimatePopup && estimateData ? (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4">
-                    <style>{`
-                        @keyframes bounce-scale {
-                            0%, 100% { transform: scale(1); }
-                            50% { transform: scale(1.05); }
-                        }
-                        .animate-bounce-scale {
-                            animation: bounce-scale 0.6s ease-in-out infinite;
-                        }
-                        @keyframes confetti-fall {
-                            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-                            100% { transform: translateY(100px) rotate(360deg); opacity: 0; }
-                        }
-                        .confetti {
-                            animation: confetti-fall 2s ease-out forwards;
-                        }
-                    `}</style>
+                    <style>
+                        {`
+                            @keyframes bounce-scale {
+                                0%, 100% { transform: scale(1); }
+                                50% { transform: scale(1.05); }
+                            }
+                            .animate-bounce-scale {
+                                animation: bounce-scale 0.6s ease-in-out infinite;
+                            }
+                            @keyframes confetti-fall {
+                                0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+                                100% { transform: translateY(100px) rotate(360deg); opacity: 0; }
+                            }
+                            .confetti {
+                                animation: confetti-fall 2s ease-out forwards;
+                            }
+                        `}
+                    </style>
                     <div className="w-full max-w-md rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-8 shadow-2xl animate-bounce-scale relative overflow-hidden">
                         {/* Confetti emojis */}
                         <div className="absolute top-4 left-4 text-3xl confetti">🎊</div>
