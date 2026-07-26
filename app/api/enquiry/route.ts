@@ -96,17 +96,21 @@ export async function POST(request: Request) {
 
 		await db.collection("enquiries").insertOne(enquiryDoc);
 
-		// Send both internal notification and customer confirmation emails.
-		await sendEnquiryEmails({
-			fullName: payload.fullName,
-			email: payload.email,
-			phoneNumber: payload.phoneNumber,
-			service: payload.service,
-			subject: payload.subject,
-			message: payload.message,
-			estimate: payload.estimate,
-			createdAt,
-		});
+		try {
+			// Send both internal notification and customer confirmation emails.
+			await sendEnquiryEmails({
+				fullName: payload.fullName,
+				email: payload.email,
+				phoneNumber: payload.phoneNumber,
+				service: payload.service,
+				subject: payload.subject,
+				message: payload.message,
+				estimate: payload.estimate,
+				createdAt,
+			});
+		} catch (emailError) {
+			console.error("Enquiry saved, but email delivery failed:", emailError);
+		}
 
 		return NextResponse.json(
 			{
