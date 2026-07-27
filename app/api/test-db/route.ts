@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import net from "node:net";
 
-export async function GET() {
-  return new Promise((resolve) => {
+export async function GET(): Promise<Response> {
+  return new Promise<Response>((resolve) => {
     const socket = net.createConnection(
       {
         host: "159.143.58.33",
