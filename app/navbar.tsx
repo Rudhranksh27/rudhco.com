@@ -138,6 +138,7 @@ export default function Navbar() {
                 <div className="w-full bg-slate-50 border border-slate-100 rounded-xl py-4 flex flex-col items-center space-y-4">
                   <MobileSubNavItem href="/packages/residential" text="Residential Construction Packages" onClick={() => setIsOpen(false)} />
                   <MobileSubNavItem href="/packages/commercial" text="Commercial Construction Packages" onClick={() => setIsOpen(false)} />
+                  <MobileSubNavItem href="/packages/assam_type" text="Assam Type Construction Packages" onClick={() => setIsOpen(false)} />
                 </div>
               </div>
             </li>
@@ -279,6 +280,7 @@ function DesktopPackagesDropdown({ pathname }: { pathname: string }) {
         <div className="bg-white/95 backdrop-blur-xl border border-slate-200 rounded-xl shadow-xl py-2">
           <DropdownLink href="/packages/residential" text="Residential Construction Packages" onClick={() => setIsOpen(false)} />
           <DropdownLink href="/packages/commercial" text="Commercial Construction Packages" onClick={() => setIsOpen(false)} />
+          <DropdownLink href="/packages/assam_type" text="Assam Type Construction Packages" onClick={() => setIsOpen(false)} />
         </div>
       </div>
     </li>
