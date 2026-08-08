@@ -31,30 +31,39 @@ interface UpdateOptions {
 }
 
 function getProxyUrl(): string {
-	const url = process.env.NEXT_PUBLIC_PROXY_API_URL;
+	const url = process.env.PROXY_API_URL || process.env.NEXT_PUBLIC_PROXY_API_URL;
 	if (!url) {
-		throw new Error("Missing NEXT_PUBLIC_PROXY_API_URL environment variable.");
+		throw new Error(
+			"Missing proxy URL. Set PROXY_API_URL (preferred) or NEXT_PUBLIC_PROXY_API_URL."
+		);
 	}
 	return url.replace(/\/+$/, "");
 }
 
 function getProxyKey(): string {
-	const key = process.env.NEXT_PUBLIC_PROXY_API_KEY;
+	const key =
+		process.env.PROXY_API_KEY || process.env.NEXT_PUBLIC_PROXY_API_KEY;
 	if (!key) {
-		throw new Error("Missing NEXT_PUBLIC_PROXY_API_KEY environment variable.");
+		throw new Error(
+			"Missing proxy API key. Set PROXY_API_KEY (preferred) or NEXT_PUBLIC_PROXY_API_KEY."
+		);
 	}
-	return key;
+	return key.trim();
 }
 
 async function callProxy<T = unknown>(
 	endpoint: string,
 	body: Record<string, unknown>
 ): Promise<T> {
+	const proxyKey = getProxyKey();
 	const res = await fetch(`${getProxyUrl()}/api/${endpoint}`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
-			"x-api-key": getProxyKey(),
+			"api-key": proxyKey,
+			"x-api-key": proxyKey,
+			"x-proxy-key": proxyKey,
+			Authorization: `Bearer ${proxyKey}`,
 		},
 		body: JSON.stringify(body),
 		// Never cache database calls.
@@ -67,6 +76,13 @@ async function callProxy<T = unknown>(
 		const message =
 			(data && typeof data === "object" && "error" in data && (data as { error?: string }).error) ||
 			`Proxy request to '${endpoint}' failed with status ${res.status}`;
+
+		if (res.status === 401 || res.status === 403) {
+			throw new Error(
+				`Proxy authorization failed (status ${res.status}). Verify PROXY_API_KEY/NEXT_PUBLIC_PROXY_API_KEY and proxy auth header configuration.`
+			);
+		}
+
 		throw new Error(message);
 	}
 

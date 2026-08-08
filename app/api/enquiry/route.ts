@@ -78,7 +78,6 @@ export async function POST(request: Request) {
 			);
 		}
 
-		const db = await getDatabase();
 		const createdAt = new Date();
 
 		// Persist the enquiry in MongoDB with default status.
@@ -94,8 +93,20 @@ export async function POST(request: Request) {
 			createdAt,
 		};
 
-		await db.collection("enquiries").insertOne(enquiryDoc);
+		let dbSaved = false;
+		let dbErrorMessage: string | null = null;
 
+		try {
+			const db = await getDatabase();
+			await db.collection("enquiries").insertOne(enquiryDoc);
+			dbSaved = true;
+		} catch (dbError) {
+			dbErrorMessage = dbError instanceof Error ? dbError.message : String(dbError);
+			console.error("Enquiry email fallback mode: DB save failed:", dbError);
+		}
+
+		let emailSent = false;
+		let emailErrorMessage: string | null = null;
 		try {
 			// Send both internal notification and customer confirmation emails.
 			await sendEnquiryEmails({
@@ -108,16 +119,48 @@ export async function POST(request: Request) {
 				estimate: payload.estimate,
 				createdAt,
 			});
+			emailSent = true;
 		} catch (emailError) {
-			console.error("Enquiry saved, but email delivery failed:", emailError);
+			emailErrorMessage = emailError instanceof Error ? emailError.message : String(emailError);
+			console.error("Email delivery failed:", emailError);
+		}
+
+		if (dbSaved) {
+			return NextResponse.json(
+				{
+					success: true,
+					message: emailSent
+						? "Enquiry submitted successfully."
+						: "Enquiry saved, but confirmation email could not be sent right now.",
+				},
+				{ status: 201 }
+			);
+		}
+
+		if (emailSent) {
+			return NextResponse.json(
+				{
+					success: true,
+					partial: true,
+					message:
+						"Enquiry received and email sent. Database save is temporarily unavailable.",
+					warning: dbErrorMessage,
+				},
+				{ status: 202 }
+			);
 		}
 
 		return NextResponse.json(
 			{
-				success: true,
-				message: "Enquiry submitted successfully.",
+				success: false,
+				message:
+					"Unable to process enquiry right now. Both database save and email delivery failed.",
+				errors: {
+					database: dbErrorMessage,
+					email: emailErrorMessage,
+				},
 			},
-			{ status: 201 }
+			{ status: 500 }
 		);
 	} catch (error) {
 		console.error("Error creating enquiry:", error);
