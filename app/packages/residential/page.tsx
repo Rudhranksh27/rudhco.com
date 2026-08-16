@@ -7,13 +7,13 @@ import Link from "next/link";
 
 // --- ANIMATION WRAPPER COMPONENT ---
 interface AnimateOnScrollProps {
-    children: ReactNode;
-    direction?: "up" | "down" | "left" | "right" | "none";
-    delay?: number;
-    className?: string;
+    readonly children: ReactNode;
+    readonly direction?: "up" | "down" | "left" | "right" | "none";
+    readonly delay?: number;
+    readonly className?: string;
 }
 
-function AnimateOnScroll({ children, direction = "up", delay = 0, className = "" }: AnimateOnScrollProps) {
+function AnimateOnScroll({ children, direction = "up", delay = 0, className = "" }: Readonly<AnimateOnScrollProps>) {
     const [isVisible, setIsVisible] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
 
