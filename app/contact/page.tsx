@@ -82,10 +82,8 @@ export default function ContactPage() {
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [showEstimatePopup, setShowEstimatePopup] = useState(false);
     const [estimateData, setEstimateData] = useState<any>(null);
 
@@ -111,12 +109,11 @@ export default function ContactPage() {
         }
     };
 
-    // Submit the form to our API endpoint instead of using mailto.
+    // Submit form using FormSubmit.co (static, no backend needed)
     const handleSend = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         setIsSubmitting(true);
-        setSuccessMessage('');
         setErrorMessage('');
         setFieldErrors({});
 
@@ -136,79 +133,40 @@ export default function ContactPage() {
 
         try {
             const estimatePayload = readPendingEstimate();
+            const fullName = `${formData.firstName} ${formData.lastName}`.trim();
 
-            const response = await fetch('/api/enquiry', {
+            // Send email via FormSubmit.co (static hosting friendly)
+            const formData2 = new FormData();
+            formData2.append('Full Name', fullName);
+            formData2.append('Email', formData.email);
+            formData2.append('Phone Number', formData.phoneno);
+            formData2.append('Service', formData.service || 'Not specified');
+            formData2.append('Subject', formData.subject || 'General Enquiry');
+            formData2.append('Message', formData.message);
+            
+            if (estimatePayload) {
+                formData2.append('Estimate Package', estimatePayload.packageName || '');
+                formData2.append('Estimate Cost', `Rs ${estimatePayload.estimatedCost?.toLocaleString('en-IN') || ''}`);
+            }
+
+            const response = await fetch('https://formsubmit.co/ajax/business@rudhco.com', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    fullName: `${formData.firstName} ${formData.lastName}`.trim(),
-                    email: formData.email,
-                    phoneNumber: formData.phoneno,
-                    service: formData.service,
-                    subject: formData.subject,
-                    message: formData.message,
-                    estimate: estimatePayload
-                })
+                body: formData2
             });
 
-            const responseText = await response.text();
-            let data: any = {};
-
-            if (responseText) {
-                try {
-                    data = JSON.parse(responseText);
-                } catch {
-                    data = { message: responseText };
-                }
-            }
-
             if (!response.ok) {
-                if (data?.errors && typeof data.errors === 'object') {
-                    const nextErrors: Record<string, string> = {};
-                    if (data.errors.fullName) {
-                        nextErrors.firstName = data.errors.fullName;
-                        nextErrors.lastName = data.errors.fullName;
-                    }
-                    if (data.errors.phoneNumber) {
-                        nextErrors.phoneno = data.errors.phoneNumber;
-                    }
-                    if (data.errors.email) {
-                        nextErrors.email = data.errors.email;
-                    }
-                    if (data.errors.service) {
-                        nextErrors.service = data.errors.service;
-                    }
-                    if (data.errors.subject) {
-                        nextErrors.subject = data.errors.subject;
-                    }
-                    if (data.errors.message) {
-                        nextErrors.message = data.errors.message;
-                    }
-                    setFieldErrors(nextErrors);
-                }
-
-                setErrorMessage(data?.message || 'Unable to submit your enquiry right now.');
-                return;
+                throw new Error('Failed to send enquiry');
             }
 
-            setSuccessMessage('Thank you. Your enquiry has been submitted successfully.');
-            setShowSuccessPopup(true);
-            
+            // Skip thank you popup - directly show estimate popup
             const pendingEstimate = readPendingEstimate();
             if (pendingEstimate) {
                 setEstimateData(pendingEstimate);
-                
-                // Wait 1 second before showing estimate popup
-                setTimeout(() => {
-                    setShowSuccessPopup(false);
-                    setShowEstimatePopup(true);
-                    // Clear the pending estimate from localStorage
-                    localStorage.removeItem('pendingEstimate');
-                }, 1000);
+                setShowEstimatePopup(true);
+                localStorage.removeItem('pendingEstimate');
             }
-            
+
+            // Clear the form
             setFormData({
                 firstName: '',
                 lastName: '',
@@ -220,7 +178,7 @@ export default function ContactPage() {
             });
         } catch (error) {
             console.error('Enquiry submission failed:', error);
-            setErrorMessage(error instanceof Error ? error.message : 'Network error. Please try again in a moment.');
+            setErrorMessage('Unable to submit your enquiry. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
@@ -229,26 +187,6 @@ export default function ContactPage() {
     return (
         <div className="flex flex-col min-h-screen font-sans bg-slate-50 text-slate-900 selection:bg-amber-500 selection:text-white overflow-hidden">
             <Navbar />
-
-            {showSuccessPopup ? (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4">
-                    <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
-                        <h3 className="text-xl font-bold text-slate-900">Enquiry Submitted</h3>
-                        <p className="mt-3 text-sm leading-relaxed text-slate-600">
-                            Thank you for contacting Rudhco. We have received your enquiry and sent a confirmation email to your inbox.
-                        </p>
-                        <div className="mt-6 flex justify-end">
-                            <button
-                                type="button"
-                                onClick={() => setShowSuccessPopup(false)}
-                                className="rounded-full bg-amber-500 px-5 py-2 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-amber-400"
-                            >
-                                OK
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            ) : null}
 
             {showEstimatePopup && estimateData ? (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4">
@@ -454,9 +392,6 @@ export default function ContactPage() {
                                 ) : null}
                             </div>
 
-                            {successMessage ? (
-                                <p className="text-sm text-emerald-600">{successMessage}</p>
-                            ) : null}
                             {errorMessage ? (
                                 <p className="text-sm text-red-500">{errorMessage}</p>
                             ) : null}
