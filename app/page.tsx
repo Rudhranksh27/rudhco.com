@@ -185,11 +185,346 @@ function HomeCarousel() {
     );
 }
 
+// --- HOME LOAN PARTNERS COMPONENT ---
+function HomeLoanPartners() {
+    const [activeBank, setActiveBank] = useState(0);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+    const banks = [
+        { name: "HDFC", logo: "/Banks/Hdfc/hdfc logo.png" },
+        { name: "SBI", logo: "/Banks/SBI/sbi home loans.png" },
+        { name: "ICICI", logo: "/Banks/ICICI/icici-home-finance-seeklogo.png" },
+        { name: "BAJAJ", logo: "/Banks/Bajaj/bajaj.png" },
+        { name: "LIC", logo: "/Banks/Lic/f100a8d009c83e858e334aa5b1bd8cb5.png" },
+        { name: "AXIS", logo: "/Banks/Axis/axis.png" }
+    ];
+
+    const scrollToBank = (index: number) => {
+        setActiveBank(index);
+        if (scrollContainerRef.current) {
+            const cardWidth = scrollContainerRef.current.scrollWidth / banks.length;
+            scrollContainerRef.current.scrollTo({
+                left: cardWidth * index,
+                behavior: "smooth"
+            });
+        }
+    };
+
+    return (
+        <div className="space-y-8">
+            {/* Banks Display with Scrollable Container */}
+            <AnimateOnScroll direction="up" className="relative">
+                <div className="relative">
+                    {/* Scroll Container */}
+                    <div 
+                        ref={scrollContainerRef}
+                        className="flex gap-4 md:gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory"
+                        style={{
+                            scrollBehavior: "smooth",
+                            WebkitOverflowScrolling: "touch",
+                            scrollbarWidth: "none",
+                            msOverflowStyle: "none"
+                        }}
+                        onScroll={(e) => {
+                            const element = e.currentTarget;
+                            const maxScroll = element.scrollWidth - element.clientWidth;
+                            const scrollPercent = (element.scrollLeft / maxScroll) * (banks.length - 1);
+                            setActiveBank(Math.round(scrollPercent));
+                        }}
+                    >
+                        <style>{`
+                            div::-webkit-scrollbar {
+                                display: none;
+                            }
+                        `}</style>
+                        {banks.map((bank, index) => (
+                            <div
+                                key={index}
+                                className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/4 snap-center"
+                            >
+                                <AnimateOnScroll
+                                    direction="up"
+                                    delay={index * 50}
+                                    className="bg-white/90 backdrop-blur-sm p-4 md:p-8 rounded-2xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-white/50 group flex flex-col items-center justify-center min-h-[200px] md:min-h-[250px] h-full"
+                                >
+                                    <div className="mb-4 flex items-center justify-center h-20 md:h-28 w-full">
+                                        <img
+                                            src={bank.logo}
+                                            alt={bank.name}
+                                            className="max-h-16 md:max-h-24 max-w-[90%] object-contain group-hover:scale-110 transition-transform duration-300"
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = "none";
+                                            }}
+                                        />
+                                    </div>
+                                    <h4 className="text-slate-900 font-bold text-sm md:text-base text-center leading-relaxed px-2">
+                                        {bank.name}
+                                    </h4>
+                                </AnimateOnScroll>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Pagination Dots */}
+                    <div className="flex justify-center gap-2 mt-6">
+                        {banks.map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => scrollToBank(index)}
+                                className={`transition-all duration-300 rounded-full ${
+                                    activeBank === index
+                                        ? "w-8 h-3 bg-amber-500"
+                                        : "w-3 h-3 bg-slate-300 hover:bg-slate-400"
+                                }`}
+                                aria-label={`Go to ${banks[index].name}`}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </AnimateOnScroll>
+
+            {/* Info Text */}
+            <AnimateOnScroll direction="up" className="text-center max-w-3xl mx-auto">
+                <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                    We offer home loan assistance with trusted banking partners. Get competitive rates and easy approvals 
+                    for your dream home through our network of leading financial institutions.
+                </p>
+            </AnimateOnScroll>
+        </div>
+    );
+}
+
+// --- BRANDING PARTNERS COMPONENT ---
+function BrandingPartners() {
+    const [activeTab, setActiveTab] = useState("cement");
+
+    const brandData: Record<string, { brands: Array<{ name: string; logo?: string }>; color: string }> = {
+        cement: {
+            brands: [
+                { name: "DALMIA CEMENT", logo: "/logos/cements/dalmia-bharat-group-seeklogo.png" },
+                { name: "STAR CEMENT", logo: "/logos/cements/Star_Cement_Ltd-_id7ARTJxyH_0.png" },
+                { name: "DURAGUARD CEMENT", logo: "/logos/cements/Durgaguard.jpg" }
+            ],
+            color: "from-slate-500/40 to-slate-600/40"
+        },
+        steel: {
+            brands: [
+                { name: "DURGAPUR 500D", logo: "/logos/steels/durgrapur steel.png" },
+                { name: "SHYAM STEEL 550D", logo: "/logos/steels/Shyam.png" },
+                { name: "JSW NEOSTEEL 550D", logo: "/logos/steels/jsw-steel-seeklogo.png" },
+                { name: "TATA TISCON 550D", logo: "/logos/steels/tata-tiscon-seeklogo.png" },
+                { name: "SAIL 550D", logo: "/logos/steels/sail-seeklogo.png" }
+            ],
+            color: "from-blue-500/40 to-blue-600/40"
+        },
+        windows: {
+            brands: [
+                { name: "BHAGAWATI WINDOWS", logo: "/logos/windows/bhagawati.PNG" },
+                { name: "FENESTA WINDOWS", logo: "/logos/windows/fenesta-seeklogo.png" },
+                { name: "HALCO WINDOWS", logo: "/logos/windows/halco.png" }
+            ],
+            color: "from-cyan-500/40 to-blue-600/40"
+        },
+        paint: {
+            brands: [
+                { name: "BERGER PAINTS", logo: "/logos/paints/berger-paints-seeklogo.png" },
+                { name: "BIRLA OPUS", logo: "/logos/paints/birla-opus-paints-seeklogo.png" },
+                { name: "ASIAN PAINTS", logo: "/logos/paints/asian-paints-seeklogo.png" }
+            ],
+            color: "from-yellow-500/40 to-amber-600/40"
+        },
+        sanitary: {
+            brands: [
+                { name: "HINDWARE", logo: "/logos/sanitary/hindware-seeklogo.png" },
+                { name: "JAQUAR", logo: "/logos/sanitary/jaquar-seeklogo.png" }
+            ],
+            color: "from-teal-500/40 to-emerald-600/40"
+        },
+        tiles: {
+            brands: [
+                { name: "2x2 NANO TILES" },
+                { name: "4x2 DIGITAL TILES" },
+                { name: "GRANITE SLAB" },
+                { name: "WALL TILES" },
+                { name: "PREMIUM DIGITAL TILES" }
+            ],
+            color: "from-rose-500/40 to-pink-600/40"
+        },
+        waterproofing: {
+            brands: [
+                { name: "WATERPROOF COATING" },
+                { name: "SEALANT SYSTEMS" },
+                { name: "MOISTURE BARRIER" },
+                { name: "ROOF PROTECTION" }
+            ],
+            color: "from-indigo-500/40 to-purple-600/40"
+        }
+    };
+
+    const tabs = [
+        { id: "cement", label: "Cement" },
+        { id: "steel", label: "Steel" },
+        { id: "windows", label: "Windows" },
+        { id: "paint", label: "Paint" },
+        { id: "sanitary", label: "Sanitary" },
+        { id: "tiles", label: "Tiles" },
+        { id: "waterproofing", label: "Waterproofing" }
+    ];
+
+    const currentData = brandData[activeTab];
+    const hasBrandLogos = currentData.brands.some(brand => brand.logo);
+
+    return (
+        <div className="space-y-8">
+            {/* Tabs Navigation */}
+            <div className="flex flex-wrap justify-center gap-3 mb-12">
+                {tabs.map((tab) => (
+                    <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`px-6 py-3 rounded-full font-semibold text-sm uppercase tracking-wide transition-all duration-300 border-2 ${
+                            activeTab === tab.id
+                                ? "bg-amber-500 text-white border-amber-500 shadow-lg shadow-amber-500/50 scale-105"
+                                : "bg-white text-slate-700 border-slate-200 hover:border-amber-400 hover:text-amber-600"
+                        }`}
+                    >
+                        {tab.label}
+                    </button>
+                ))}
+            </div>
+
+            {/* Brands Display */}
+            <AnimateOnScroll direction="up" className="relative">
+                <div className={`grid ${hasBrandLogos ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'}`}>
+                    {currentData.brands.map((brand, index) => (
+                        <AnimateOnScroll
+                            key={index}
+                            direction="up"
+                            delay={index * 50}
+                            className="bg-white/90 backdrop-blur-sm p-4 md:p-8 rounded-2xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-white/50 group flex flex-col items-center justify-center min-h-[200px] md:min-h-[250px]"
+                        >
+                            {brand.logo ? (
+                                <>
+                                    <div className="mb-4 flex items-center justify-center h-20 md:h-28 w-full">
+                                        <img
+                                            src={brand.logo}
+                                            alt={brand.name}
+                                            className="max-h-16 md:max-h-24 max-w-[90%] object-contain group-hover:scale-110 transition-transform duration-300"
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = "none";
+                                            }}
+                                        />
+                                    </div>
+                                    <h4 className="text-slate-900 font-bold text-xs md:text-sm text-center leading-relaxed px-2">
+                                        {brand.name}
+                                    </h4>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="p-3 bg-amber-50 rounded-full group-hover:bg-amber-100 transition-colors mb-4">
+                                        <svg className="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m7 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <h4 className="text-slate-900 font-bold text-sm md:text-base leading-relaxed text-center">
+                                        {brand.name}
+                                    </h4>
+                                </>
+                            )}
+                        </AnimateOnScroll>
+                    ))}
+                </div>
+            </AnimateOnScroll>
+
+            {/* Info Text */}
+            <AnimateOnScroll direction="up" className="text-center max-w-3xl mx-auto">
+                <p className="text-slate-600 text-sm md:text-base leading-relaxed">
+                    We partner with industry-leading brands to ensure the highest quality materials for every project. 
+                    Our commitment to excellence means selecting only the best suppliers and products for your construction needs.
+                </p>
+            </AnimateOnScroll>
+        </div>
+    );
+}
+
+// --- SOCIAL MEDIA SIDEBAR COMPONENT ---
+function SocialMediaSidebar() {
+    const [isVisible, setIsVisible] = useState(false);
+
+    const socialLinks = [
+        {
+            name: "WhatsApp",
+            icon: "M12 0C5.37 0 0 5.37 0 12c0 2.11.57 4.1 1.56 5.82L0 24l6.35-1.53C8.5 23.3 10.2 24 12 24c6.63 0 12-5.37 12-12S18.63 0 12 0zm0 21.97c-1.49 0-2.95-.35-4.28-.97l-.31-.15-3.2.77.78-3.13-.2-.31c-.71-1.43-1.08-3.04-1.08-4.71 0-5.51 4.49-10 10-10s10 4.49 10 10-4.49 10-10 10zm5.54-7.5c-.3-.15-1.78-.88-2.06-.98-.28-.1-.48-.15-.68.15-.2.3-.78.98-.95 1.19-.17.2-.35.23-.65.08-.3-.15-1.27-.47-2.43-1.5-.9-.8-1.5-1.78-1.68-2.08-.18-.3-.02-.47.13-.62.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.38-.025-.53-.075-.15-.68-1.64-.93-2.25-.24-.58-.49-.51-.68-.52-.18-.01-.38-.01-.58-.01-.2 0-.53.08-.81.38-.28.3-1.06 1.04-1.06 2.54 0 1.5 1.09 2.94 1.24 3.14.15.2 2.13 3.26 5.16 4.57.72.31 1.29.5 1.73.64.72.23 1.38.2 1.9.12.58-.09 1.79-.73 2.04-1.44.25-.71.25-1.32.18-1.44-.08-.12-.27-.2-.57-.35z",
+            url: "https://wa.me/918471888393",
+            color: "hover:text-green-500",
+            bgColor: "hover:bg-green-50"
+        },
+        {
+            name: "Instagram",
+            icon: "M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.117.63c-.794.306-1.459.717-2.126 1.384S.957 3.93.65 4.717c-.297.788-.398 1.658-.457 2.937C.007 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.279-.059 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.788-.717-1.459-1.384-2.126C21.319 1.347 20.651.942 19.863.637c-.765-.297-1.636-.499-2.913-.558C15.667.007 15.26 0 12 0zm0 2.16c3.203 0 3.585.009 4.85.07 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.061 1.265.07 1.645.07 4.849 0 3.205-.009 3.584-.07 4.849-.061 1.17-.249 1.805-.415 2.227-.217.562-.477.96-.896 1.382-.42.419-.819.679-1.381.896-.422.164-1.057.36-2.227.413-1.265.061-1.645.07-4.849.07-3.206 0-3.584-.009-4.849-.07-1.171-.061-1.805-.249-2.228-.415-.562-.217-.96-.477-1.382-.896-.419-.42-.679-.819-.896-1.381-.164-.422-.36-1.057-.413-2.227-.061-1.265-.07-1.645-.07-4.849 0-3.204.009-3.584.07-4.849.061-1.17.249-1.805.415-2.227.217-.562.477-.96.896-1.382.42-.419.819-.679 1.381-.896.422-.164 1.057-.36 2.227-.413 1.265-.061 1.645-.07 4.849-.07zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 100-8 4 4 0 000 8zm4.965-10.322a1.44 1.44 0 112.881 0 1.44 1.44 0 01-2.881 0z",
+            url: "https://www.instagram.com/rudhcoinfrastructure/",
+            color: "hover:text-pink-500",
+            bgColor: "hover:bg-pink-50"
+        },
+        {
+            name: "Facebook",
+            icon: "M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z",
+            url: "https://www.facebook.com/rudhcoinfrastructure/",
+            color: "hover:text-blue-600",
+            bgColor: "hover:bg-blue-50"
+        }
+    ];
+
+    return (
+        <div
+            className="fixed right-4 md:right-8 top-1/2 transform -translate-y-1/2 z-50 flex flex-col gap-4 md:gap-6"
+            onMouseEnter={() => setIsVisible(true)}
+            onMouseLeave={() => setIsVisible(false)}
+        >
+            {socialLinks.map((social, index) => (
+                <a
+                    key={index}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={social.name}
+                    className={`
+                        w-12 h-12 md:w-14 md:h-14 
+                        flex items-center justify-center
+                        rounded-full
+                        bg-white/80 backdrop-blur-sm
+                        border border-slate-200
+                        shadow-lg
+                        transition-all duration-300
+                        ${social.bgColor}
+                        ${social.color}
+                        hover:shadow-xl hover:-translate-y-1
+                        transform
+                    `}
+                >
+                    <svg
+                        className="w-6 h-6 md:w-7 md:h-7 fill-current"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path d={social.icon} />
+                    </svg>
+                </a>
+            ))}
+
+
+        </div>
+    );
+}
+
 // --- MAIN PAGE COMPONENT ---
 export default function Home() {
     return (
         <div className="flex flex-col min-h-screen font-sans bg-slate-50 text-slate-900 selection:bg-amber-500 selection:text-white overflow-x-hidden">
             <Navbar />
+
+            {/* Social Media Sidebar */}
+            <SocialMediaSidebar />
 
             {/* --- CUSTOM CSS FOR BACKGROUND ANIMATION --- */}
             <style>{`
@@ -320,7 +655,33 @@ export default function Home() {
                 </section>
 
                 {/* =========================================
-                    SECTION 3: WHY CHOOSE US
+                    SECTION 3: HOME LOAN PARTNERS
+                    ========================================= */}
+                <section className="w-full max-w-7xl mx-auto px-6 py-24">
+                    <AnimateOnScroll direction="up" className="text-center mb-16">
+                        <h2 className="text-amber-500 tracking-[0.3em] text-xs font-bold uppercase mb-4">Financial Solutions</h2>
+                        <h3 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Home Loan Partners</h3>
+                        <div className="w-16 h-1 bg-amber-500 mx-auto opacity-80"></div>
+                    </AnimateOnScroll>
+
+                    <HomeLoanPartners />
+                </section>
+
+                {/* =========================================
+                    SECTION 4: OUR BRANDING PARTNERS
+                    ========================================= */}
+                <section className="w-full max-w-7xl mx-auto px-6 py-24">
+                    <AnimateOnScroll direction="up" className="text-center mb-16">
+                        <h2 className="text-amber-500 tracking-[0.3em] text-xs font-bold uppercase mb-4">Quality Assurance</h2>
+                        <h3 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Our Branding Partners</h3>
+                        <div className="w-16 h-1 bg-amber-500 mx-auto opacity-80"></div>
+                    </AnimateOnScroll>
+
+                    <BrandingPartners />
+                </section>
+
+                {/* =========================================
+                    SECTION 5: WHY CHOOSE US
                     ========================================= */}
                 <section className="w-full bg-slate-100 border-y border-slate-200 py-24 relative overflow-hidden">
                     {/* Decorative geometry for this section */}
