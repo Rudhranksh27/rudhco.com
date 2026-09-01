@@ -480,7 +480,7 @@ export default function CommercialPackagesPage() {
                     {/* Google Map */}
                     <div className="w-full h-64 md:h-full min-h-[250px] rounded-2xl overflow-hidden shadow-lg border border-slate-200 transition duration-700">
                         <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3581.423985141009!2d91.8159183!3d26.150346!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a593f6c8d4db3%3A0xc3f5c90b6a7a0b5c!2sPanjabari%20Rd%2C%20Guwahati%2C%20Assam!5e0!3m2!1sen!2sin!4v1689254321098!5m2!1sen!2sin" 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.7141744504574!2d91.77225167492242!3d26.173436591470374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a59001b441573%3A0xd76a2a6023476d98!2ssugam%20path%20zoo%20road!5e0!3m2!1sen!2sin!4v1788258520248!5m2!1sen!2sin" 
                             width="100%" 
                             height="100%" 
                             style={{ border: 0 }} 
