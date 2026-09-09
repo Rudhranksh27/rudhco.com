@@ -54,9 +54,8 @@ const localBusinessSchema = {
   email: "business@rudhco.com",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "House No-35, 3rd floor, Panjabari Road, Near Canara Bank, Panjabari Branch",
-    addressLocality: "Panjabari",
-    postalCode: "781037",
+    streetAddress: "House no. 28, Sugam Path Zoo Road (10h Bye Lane- West), R.G. Baruah Road",
+    addressLocality: "Guwahati",
     addressRegion: "Assam",
     addressCountry: "IN",
   },

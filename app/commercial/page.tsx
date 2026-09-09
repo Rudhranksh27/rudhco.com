@@ -343,10 +343,13 @@ export default function CommercialConstructionPage() {
                                 </div>
                                 <div className="mt-1">
                                     <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Location</p>
-                                    <p className="text-slate-700 font-medium max-w-xs leading-relaxed">House No-35, 3rd floor, Panjabari Road, Near Canara Bank, Panjabari Branch, Pin - 781037, Assam</p>
+                                    <p className="text-slate-700 font-medium max-w-xs leading-relaxed">House no. 28, Sugam Path Zoo Road (10h Bye Lane- West), R.G. Baruah Road, Guwahati</p>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    < div > 
+                
                     </div>
 
                     {/* Google Map */}

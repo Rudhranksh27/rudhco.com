@@ -134,11 +134,18 @@ export default function Navbar() {
                 </button>
               </div>
 
-              <div className={`overflow-hidden transition-all duration-300 w-full px-6 flex flex-col items-center ${isMobilePackagesOpen ? 'max-h-70 mt-2 opacity-100' : 'max-h-0 opacity-0'}`}>
+              <div className={`overflow-hidden transition-all duration-300 w-full px-6 flex flex-col items-center ${isMobilePackagesOpen ? 'max-h-96 mt-2 opacity-100' : 'max-h-0 opacity-0'}`}>
                 <div className="w-full bg-slate-50 border border-slate-100 rounded-xl py-4 flex flex-col items-center space-y-4">
+                  <div className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase">Construction</div>
                   <MobileSubNavItem href="/packages/residential" text="Residential Construction Packages" onClick={() => setIsOpen(false)} />
                   <MobileSubNavItem href="/packages/commercial" text="Commercial Construction Packages" onClick={() => setIsOpen(false)} />
                   <MobileSubNavItem href="/packages/assam_type" text="Assam Type Construction Packages" onClick={() => setIsOpen(false)} />
+                  
+                  <div className="w-12 h-px bg-slate-200 my-2"></div>
+                  
+                  <div className="text-[10px] text-slate-400 font-bold tracking-[0.3em] uppercase">Digital</div>
+                  <MobileSubNavItem href="/packages/digital_marketing" text="Digital Marketing Packages" onClick={() => setIsOpen(false)} />
+                  <MobileSubNavItem href="/packages/web_development" text="Web development Packages" onClick={() => setIsOpen(false)} />
                 </div>
               </div>
             </li>
@@ -258,7 +265,7 @@ function DesktopPackagesDropdown({ pathname }: { pathname: string }) {
 
   return (
     <li
-      className="relative"
+      className="relative group/main"
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
     >
@@ -269,18 +276,37 @@ function DesktopPackagesDropdown({ pathname }: { pathname: string }) {
         className="block py-6 -my-6"
       >
         <div className="relative py-2 inline-block cursor-pointer">
-          <span className={`text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300 ${isActive ? 'text-amber-600' : 'text-slate-600 hover:text-amber-500'}`}>
+          <span className={`text-xs font-medium tracking-[0.2em] uppercase transition-colors duration-300 ${isActive ? 'text-amber-600' : 'text-slate-600 group-hover/main:text-amber-500'}`}>
             Packages
           </span>
-          <span className={`absolute bottom-0 left-0 h-px bg-amber-500 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 hover:w-full'}`}></span>
+          <span className={`absolute bottom-0 left-0 h-px bg-amber-500 transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover/main:w-full'}`}></span>
         </div>
       </button>
 
       <div className={`absolute top-full left-1/2 -translate-x-1/2 pt-6 transition-all duration-300 z-50 w-80 ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
         <div className="bg-white/95 backdrop-blur-xl border border-slate-200 rounded-xl shadow-xl py-2">
-          <DropdownLink href="/packages/residential" text="Residential Construction Packages" onClick={() => setIsOpen(false)} />
-          <DropdownLink href="/packages/commercial" text="Commercial Construction Packages" onClick={() => setIsOpen(false)} />
-          <DropdownLink href="/packages/assam_type" text="Assam Type Construction Packages" onClick={() => setIsOpen(false)} />
+          {/* Construction Packages Item (Has Level 2 Dropdown) */}
+          <div className="relative group/sub">
+            <div className="px-5 py-3 hover:bg-slate-50 cursor-pointer flex items-center justify-between transition-colors">
+              <span className="text-sm text-slate-600 group-hover/sub:text-amber-600 transition-colors">Construction Packages</span>
+              {/* Arrow Icon: Points Right when hovering */}
+              <svg className="w-4 h-4 text-slate-400 group-hover/sub:text-amber-600 transform transition-transform duration-300 group-hover/sub:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+
+            {/* Level 2 Dropdown (Side Menu) - Appears on Left */}
+            <div className="absolute top-0 right-full pr-2 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-300 w-70">
+              <div className="bg-white/95 backdrop-blur-xl border border-slate-200 rounded-xl shadow-xl py-2">
+                <DropdownLink href="/packages/residential" text="Residential Construction Packages" onClick={() => setIsOpen(false)} />
+                <DropdownLink href="/packages/commercial" text="Commercial Construction Packages" onClick={() => setIsOpen(false)} />
+                <DropdownLink href="/packages/assam_type" text="Assam Type Construction Packages" onClick={() => setIsOpen(false)} />
+              </div>
+            </div>
+          </div>
+
+          <DropdownLink href="/packages/digital_marketing" text="Digital Marketing Packages" onClick={() => setIsOpen(false)} />
+          <DropdownLink href="/packages/web_development" text="Web development Packages" onClick={() => setIsOpen(false)} />
         </div>
       </div>
     </li>

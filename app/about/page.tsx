@@ -12,7 +12,7 @@ import Founder from '../../images/founder1.webp';
 // --- ANIMATION WRAPPER COMPONENT ---
 interface AnimateOnScrollProps {
     children: ReactNode;
-    direction?: "up" | "down" | "left" | "right" | "none";
+    direction?: "up" | "down" | "left" | "right" | "none"
     delay?: number;
     className?: string;
 }
