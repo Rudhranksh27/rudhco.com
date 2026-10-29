@@ -482,28 +482,33 @@ function TechnologyStackTable() {
                 </div>
 
                 {/* Column Headers */}
-                <div className="grid grid-cols-[1fr_1.5fr_1.5fr] gap-3 p-6 border-b border-slate-200 bg-gradient-to-r from-slate-900/5 to-slate-700/5">
+                <div className="hidden md:grid grid-cols-[1fr_1.5fr_1.5fr] gap-3 p-6 border-b border-slate-200 bg-gradient-to-r from-slate-900/5 to-slate-700/5">
                     <div className="font-bold text-slate-900 text-sm uppercase tracking-wide">Stack</div>
                     <div className="font-bold text-slate-900 text-sm uppercase tracking-wide">Best For</div>
                     <div className="font-bold text-slate-900 text-sm uppercase tracking-wide">Recommendation</div>
                 </div>
 
                 {/* Technology Rows */}
-                <div className="p-6 space-y-2">
+                <div className="p-4 md:p-6 space-y-2">
                     {technologyStacks.map((tech, idx) => {
                         return (
                             <div key={idx} className="bg-white/50 backdrop-blur-sm rounded-lg overflow-hidden border border-slate-200 hover:border-slate-300 transition-colors">
-                                <div className="w-full px-6 py-5 flex items-center gap-4 text-left">
-                                    <div className="flex-1 grid grid-cols-[1fr_1.5fr_1.5fr] gap-3 items-center">
-                                        <div>
+                                <div className="w-full px-4 md:px-6 py-4 md:py-5 flex items-center gap-4 text-left">
+                                    <div className="flex-1 min-w-0 grid grid-cols-1 md:grid-cols-[1fr_1.5fr_1.5fr] gap-2 md:gap-3 md:items-center">
+                                        <div className="min-w-0 break-words">
+                                            <span className="md:hidden block text-xs font-bold uppercase tracking-wide text-slate-400 mb-0.5">Stack</span>
                                             <span className="font-bold text-slate-900 text-sm">{tech.stack}</span>
                                         </div>
-                                        <div>
+                                        <div className="min-w-0 break-words">
+                                            <span className="md:hidden block text-xs font-bold uppercase tracking-wide text-slate-400 mb-0.5">Best For</span>
                                             <span className="text-slate-600 text-sm">{tech.bestFor}</span>
                                         </div>
-                                        <div className={`flex items-center gap-2 ${getRecommendationStyle(tech.type)}`}>
-                                            <span>{getRecommendationIcon(tech.type)}</span>
-                                            <span className="text-sm">{tech.recommendation}</span>
+                                        <div className="min-w-0 break-words">
+                                            <span className="md:hidden block text-xs font-bold uppercase tracking-wide text-slate-400 mb-0.5">Recommendation</span>
+                                            <div className={`flex items-center gap-2 ${getRecommendationStyle(tech.type)}`}>
+                                                <span>{getRecommendationIcon(tech.type)}</span>
+                                                <span className="text-sm">{tech.recommendation}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1081,7 +1086,7 @@ export default function WebDevelopmentPackagesPage() {
             <main className="flex-grow flex flex-col items-center w-full relative z-10 pb-20">
 
                 <section className="w-full pt-32 pb-16 px-6">
-                    <AnimateOnScroll direction="down" className="max-w-4xl mx-auto text-center bg-white/40 backdrop-blur-md p-10 md:p-16 rounded-3xl shadow-xl shadow-slate-200/50 border border-white">
+                    <AnimateOnScroll direction="down" className="max-w-4xl mx-auto text-center bg-white/40 backdrop-blur-md p-6 sm:p-10 md:p-16 rounded-3xl shadow-xl shadow-slate-200/50 border border-white">
                         <h2 className="text-green-500 tracking-[0.3em] text-xs md:text-sm font-bold uppercase mb-4">
                             Transparent Pricing Tiers
                         </h2>
@@ -1203,12 +1208,12 @@ export default function WebDevelopmentPackagesPage() {
                             </div>
                             <div className="flex items-start gap-4">
                                 <div className="p-3 bg-slate-50 rounded-full text-green-500"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg></div>
-                                <div className="mt-1"><p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Location</p><p className="text-slate-700 font-medium max-w-xs">House no. 28, Sugam Path Zoo Road (10h Bye Lane- West), R.G. Baruah Road, Guwahati</p></div>
+                                <div className="mt-1"><p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Location</p><p className="text-slate-700 font-medium max-w-xs">House no. 6, Sadabor avenue, 2nd floor, bylane no. 7, Mother Teresa road, Guwahati -781021</p></div>
                             </div>
                         </div>
                     </div>
                     <div className="w-full h-64 md:h-full min-h-[250px] rounded-2xl overflow-hidden shadow-lg border border-slate-200">
-                      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.7141744504574!2d91.77225167492242!3d26.173436591470374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a59001b441573%3A0xd76a2a6023476d98!2ssugam%20path%20zoo%20road!5e0!3m2!1sen!2sin!4v1788258520248!5m2!1sen!2sin" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7161.434728997843!2d91.7786602813255!3d26.173332733325708!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a59a811ed3e65%3A0x79fa7ed6ed986926!2sGeeta%20Nagar%2C%20Guwahati%2C%20Assam%20781024!5e0!3m2!1sen!2sin!4v1790850570099!5m2!1sen!2sin" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
                 <div className="border-t border-slate-200 pt-8 text-center text-slate-500 text-xs tracking-widest uppercase">

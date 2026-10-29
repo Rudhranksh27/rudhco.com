@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, ReactNode } from "react";
 import Navbar from "../navbar";
+import SiteFooter from "../site-footer";
 import Link from "next/link"; 
 
 // --- ANIMATION WRAPPER COMPONENT ---
@@ -100,6 +101,28 @@ export default function ServicesPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
                 </svg>
             ),
+        },
+        {
+            id: "web-development",
+            title: "Web Development",
+            subtitle: "Digital Foundations",
+            description: "We build fast, responsive and search-friendly websites that give your business a strong online presence. From design to launch, every page is crafted to convert visitors into customers.",
+            icon: (
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+            ),
+        },
+        {
+            id: "digital-marketing",
+            title: "Digital Marketing",
+            subtitle: "Reach & Growth",
+            description: "SEO, social media and paid advertising strategies that put your brand in front of the right audience. We turn online attention into measurable enquiries and lasting growth.",
+            icon: (
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                </svg>
+            ),
         }
     ];
 
@@ -182,6 +205,7 @@ export default function ServicesPage() {
 
                 </div>
             </main>
+            <SiteFooter />
         </div>
     );
 }

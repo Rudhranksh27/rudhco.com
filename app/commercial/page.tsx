@@ -210,8 +210,7 @@ export default function CommercialConstructionPage() {
             <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
                 <div className="absolute top-[15%] left-[5%] w-[400px] h-[400px] border-[40px] border-amber-500/10 rounded-3xl animate-geo-spin" />
                 <div className="absolute bottom-[10%] right-[5%] w-[300px] h-[300px] border-[30px] border-blue-600/5 rounded-full animate-geo-float" />
-                <div className="absolute top-[40%] right-[20%] w-[150px] h-[150px] bg-amber-400/10 rotate-45 animate-geo-spin-slow" />
-            </div>
+             </div>
 
             <main className="flex-grow flex flex-col items-center w-full relative z-10 pb-20">
 
@@ -343,7 +342,7 @@ export default function CommercialConstructionPage() {
                                 </div>
                                 <div className="mt-1">
                                     <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Location</p>
-                                    <p className="text-slate-700 font-medium max-w-xs leading-relaxed">House no. 28, Sugam Path Zoo Road (10h Bye Lane- West), R.G. Baruah Road, Guwahati</p>
+                                    <p className="text-slate-700 font-medium max-w-xs leading-relaxed">House no. 6, Sadabor avenue, 2nd floor, bylane no. 7, Mother Teresa road, Guwahati -781021</p>
                                 </div>
                             </div>
                         </div>
@@ -355,7 +354,7 @@ export default function CommercialConstructionPage() {
                     {/* Google Map */}
                     <div className="w-full h-64 md:h-full min-h-[250px] rounded-2xl overflow-hidden shadow-lg border border-slate-200 transition duration-700">
                         <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.7141744504574!2d91.77225167492242!3d26.173436591470374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a59001b441573%3A0xd76a2a6023476d98!2ssugam%20path%20zoo%20road!5e0!3m2!1sen!2sin!4v1788258520248!5m2!1sen!2sin" 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7161.434728997843!2d91.7786602813255!3d26.173332733325708!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a59a811ed3e65%3A0x79fa7ed6ed986926!2sGeeta%20Nagar%2C%20Guwahati%2C%20Assam%20781024!5e0!3m2!1sen!2sin!4v1790850570099!5m2!1sen!2sin" 
                             width="100%" 
                             height="100%" 
                             style={{ border: 0 }} 
