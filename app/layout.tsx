@@ -13,15 +13,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Rudhco",
-  description: "Rudhco Infra & Tech Pvt. Ltd. - Building Your Legacy with Excellence in Construction and Technology.",
+  title: {
+    default: "Rudhco | Construction & Digital Services in Guwahati",
+    template: "%s | Rudhco",
+  },
+  description: "Rudhco Infra & Tech Pvt. Ltd. - Construction, interiors and digital services (web development and digital marketing) in Guwahati, Assam.",
   metadataBase: new URL("https://rudhco.com"),
   alternates: {
     canonical: "./",
   },
   openGraph: {
     title: "Rudhco",
-    description: "Rudhco Infra & Tech Pvt. Ltd. - Building Your Legacy with Excellence in Construction and Technology.",
+    description: "Rudhco Infra & Tech Pvt. Ltd. - Construction, interiors and digital services (web development and digital marketing) in Guwahati, Assam.",
     url: "https://rudhco.com",
     siteName: "Rudhco",
     locale: "en_IN",
@@ -38,7 +41,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Rudhco",
-    description: "Rudhco Infra & Tech Pvt. Ltd. - Building Your Legacy with Excellence in Construction and Technology.",
+    description: "Rudhco Infra & Tech Pvt. Ltd. - Construction, interiors and digital services (web development and digital marketing) in Guwahati, Assam.",
     images: ["/og-banner.jpg"],
   },
 };
@@ -54,9 +57,10 @@ const localBusinessSchema = {
   email: "business@rudhco.com",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "House no. 28, Sugam Path Zoo Road (10h Bye Lane- West), R.G. Baruah Road",
+    streetAddress: "House no. 6, Sadabor avenue, 2nd floor, bylane no. 7, Mother Teresa road",
     addressLocality: "Guwahati",
     addressRegion: "Assam",
+    postalCode: "781021",
     addressCountry: "IN",
   },
   openingHoursSpecification: [

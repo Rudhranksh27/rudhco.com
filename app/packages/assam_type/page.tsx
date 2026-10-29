@@ -405,12 +405,12 @@ export default function AssamTypePackagesPage() {
                             </div>
                             <div className="flex items-start gap-4">
                                 <div className="p-3 bg-slate-50 rounded-full text-amber-500"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg></div>
-                                <div className="mt-1"><p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Location</p><p className="text-slate-700 font-medium max-w-xs">House no. 28, Sugam Path Zoo Road (10h Bye Lane- West), R.G. Baruah Road, Guwahati</p></div>
+                                <div className="mt-1"><p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Location</p><p className="text-slate-700 font-medium max-w-xs">House no. 6, Sadabor avenue, 2nd floor, bylane no. 7, Mother Teresa road, Guwahati -781021</p></div>
                             </div>
                         </div>
                     </div>
                     <div className="w-full h-64 md:h-full min-h-[250px] rounded-2xl overflow-hidden shadow-lg border border-slate-200">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.7141744504574!2d91.77225167492242!3d26.173436591470374!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a59001b441573%3A0xd76a2a6023476d98!2ssugam%20path%20zoo%20road!5e0!3m2!1sen!2sin!4v1788258520248!5m2!1sen!2sin" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7161.434728997843!2d91.7786602813255!3d26.173332733325708!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a59a811ed3e65%3A0x79fa7ed6ed986926!2sGeeta%20Nagar%2C%20Guwahati%2C%20Assam%20781024!5e0!3m2!1sen!2sin!4v1790850570099!5m2!1sen!2sin" width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
                 <div className="border-t border-slate-200 pt-8 text-center text-slate-500 text-xs tracking-widest uppercase">

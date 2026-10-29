@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, ReactNode } from "react";
 import Head from "next/head";
 import Navbar from "../navbar";
+import SiteFooter from "../site-footer";
 import Link from "next/link";
 import Image from "next/image";
 import Founder from '../../images/founder1.webp';
@@ -248,6 +249,7 @@ export default function AboutPage() {
 
                     </div>
                 </main>
+                <SiteFooter />
             </div>
         </>
     );
