@@ -482,28 +482,33 @@ function TechnologyStackTable() {
                 </div>
 
                 {/* Column Headers */}
-                <div className="grid grid-cols-[1fr_1.5fr_1.5fr] gap-3 p-6 border-b border-slate-200 bg-gradient-to-r from-slate-900/5 to-slate-700/5">
+                <div className="hidden md:grid grid-cols-[1fr_1.5fr_1.5fr] gap-3 p-6 border-b border-slate-200 bg-gradient-to-r from-slate-900/5 to-slate-700/5">
                     <div className="font-bold text-slate-900 text-sm uppercase tracking-wide">Stack</div>
                     <div className="font-bold text-slate-900 text-sm uppercase tracking-wide">Best For</div>
                     <div className="font-bold text-slate-900 text-sm uppercase tracking-wide">Recommendation</div>
                 </div>
 
                 {/* Technology Rows */}
-                <div className="p-6 space-y-2">
+                <div className="p-4 md:p-6 space-y-2">
                     {technologyStacks.map((tech, idx) => {
                         return (
                             <div key={idx} className="bg-white/50 backdrop-blur-sm rounded-lg overflow-hidden border border-slate-200 hover:border-slate-300 transition-colors">
-                                <div className="w-full px-6 py-5 flex items-center gap-4 text-left">
-                                    <div className="flex-1 grid grid-cols-[1fr_1.5fr_1.5fr] gap-3 items-center">
-                                        <div>
+                                <div className="w-full px-4 md:px-6 py-4 md:py-5 flex items-center gap-4 text-left">
+                                    <div className="flex-1 min-w-0 grid grid-cols-1 md:grid-cols-[1fr_1.5fr_1.5fr] gap-2 md:gap-3 md:items-center">
+                                        <div className="min-w-0 break-words">
+                                            <span className="md:hidden block text-xs font-bold uppercase tracking-wide text-slate-400 mb-0.5">Stack</span>
                                             <span className="font-bold text-slate-900 text-sm">{tech.stack}</span>
                                         </div>
-                                        <div>
+                                        <div className="min-w-0 break-words">
+                                            <span className="md:hidden block text-xs font-bold uppercase tracking-wide text-slate-400 mb-0.5">Best For</span>
                                             <span className="text-slate-600 text-sm">{tech.bestFor}</span>
                                         </div>
-                                        <div className={`flex items-center gap-2 ${getRecommendationStyle(tech.type)}`}>
-                                            <span>{getRecommendationIcon(tech.type)}</span>
-                                            <span className="text-sm">{tech.recommendation}</span>
+                                        <div className="min-w-0 break-words">
+                                            <span className="md:hidden block text-xs font-bold uppercase tracking-wide text-slate-400 mb-0.5">Recommendation</span>
+                                            <div className={`flex items-center gap-2 ${getRecommendationStyle(tech.type)}`}>
+                                                <span>{getRecommendationIcon(tech.type)}</span>
+                                                <span className="text-sm">{tech.recommendation}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1081,7 +1086,7 @@ export default function WebDevelopmentPackagesPage() {
             <main className="flex-grow flex flex-col items-center w-full relative z-10 pb-20">
 
                 <section className="w-full pt-32 pb-16 px-6">
-                    <AnimateOnScroll direction="down" className="max-w-4xl mx-auto text-center bg-white/40 backdrop-blur-md p-10 md:p-16 rounded-3xl shadow-xl shadow-slate-200/50 border border-white">
+                    <AnimateOnScroll direction="down" className="max-w-4xl mx-auto text-center bg-white/40 backdrop-blur-md p-6 sm:p-10 md:p-16 rounded-3xl shadow-xl shadow-slate-200/50 border border-white">
                         <h2 className="text-green-500 tracking-[0.3em] text-xs md:text-sm font-bold uppercase mb-4">
                             Transparent Pricing Tiers
                         </h2>
